@@ -1,21 +1,15 @@
-package com.personalproject.universal_pet_care.entity;
+package com.personalproject.universal_pet_care.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Inheritance(strategy = InheritanceType.JOINED)
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+public class RegistrationRequest {
     String firstName;
     String lastName;
     String gender;
@@ -23,5 +17,7 @@ public class User {
     String email;
     String password;
     String userType;
+
     boolean isEnabled;
+    String specialization;
 }

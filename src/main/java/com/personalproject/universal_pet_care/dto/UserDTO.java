@@ -1,21 +1,22 @@
-package com.personalproject.universal_pet_care.dto.request;
+package com.personalproject.universal_pet_care.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RegistrationRequest {
+public class UserDTO {
+    long id;
     String firstName;
     String lastName;
     String gender;
     String phoneNumber;
     String email;
-    String password;
     String userType;
     boolean isEnabled;
-    String specialization;
 }

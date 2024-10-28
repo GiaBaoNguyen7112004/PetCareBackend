@@ -1,7 +1,7 @@
 package com.personalproject.universal_pet_care.factory;
 
 
-import com.personalproject.universal_pet_care.dto.request.RegistrationRequest;
+import com.personalproject.universal_pet_care.payload.request.RegistrationRequest;
 import com.personalproject.universal_pet_care.entity.Admin;
 import com.personalproject.universal_pet_care.mapper.UserMapper;
 import com.personalproject.universal_pet_care.repository.AdminRepository;

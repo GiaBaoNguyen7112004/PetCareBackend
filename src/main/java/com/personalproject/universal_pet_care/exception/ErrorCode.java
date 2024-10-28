@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatusCode;
 
 @Getter
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum ErrorCode {
     USER_EXIST(1000, "User existed", HttpStatus.BAD_REQUEST);
 
