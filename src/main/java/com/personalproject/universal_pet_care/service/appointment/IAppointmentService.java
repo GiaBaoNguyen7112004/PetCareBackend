@@ -4,5 +4,5 @@ import com.personalproject.universal_pet_care.dto.AppointmentDTO;
 import com.personalproject.universal_pet_care.payload.request.AppointmentRequest;
 
 public interface IAppointmentService {
-    AppointmentDTO createAppointment(AppointmentRequest appointmentRequest);
+    AppointmentDTO createAppointment(AppointmentRequest appointmentRequest, long senderId, long recipientId);
 }

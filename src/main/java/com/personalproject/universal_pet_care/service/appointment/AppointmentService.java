@@ -21,12 +21,12 @@ public class AppointmentService implements IAppointmentService{
     UserRepository userRepository;
 
     @Override
-    public AppointmentDTO createAppointment(AppointmentRequest appointmentRequest) {
+    public AppointmentDTO createAppointment(AppointmentRequest appointmentRequest, long senderId, long recipientId) {
         Appointment appointment = appointmentMapper.toAppointment(appointmentRequest);
 
-        appointment.addSender(userRepository.findById(appointmentRequest.getSenderId())
+        appointment.addSender(userRepository.findById(senderId)
                 .orElseThrow(()-> new AppException(ErrorCode.NO_DATA_FOUND)));
-        appointment.addRecipient(userRepository.findById(appointmentRequest.getRecipientId())
+        appointment.addRecipient(userRepository.findById(recipientId)
                 .orElseThrow(()-> new AppException(ErrorCode.NO_DATA_FOUND)));
         appointment.setAppointmentNo();
         appointment.setStatus(AppointmentStatus.WAITING_FOR_APPROVAL);

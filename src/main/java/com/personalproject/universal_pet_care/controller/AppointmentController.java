@@ -24,11 +24,11 @@ public class AppointmentController {
     IAppointmentService iAppointmentService;
 
     @PostMapping(UrlMapping.BOOK_APPOINTMENT)
-    public ResponseEntity<?> createAppointment(@RequestBody AppointmentRequest appointmentRequest)
+    public ResponseEntity<?> createAppointment(@RequestBody AppointmentRequest appointmentRequest,
+                                               @RequestParam long senderId, @RequestParam long recipientId)
     {
-        log.info("Hello world!");
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iAppointmentService.createAppointment(appointmentRequest))
+                .data(iAppointmentService.createAppointment(appointmentRequest, senderId, recipientId))
                 .message(FeedbackMessage.CREATE_SUCCESS)
                 .build();
 
