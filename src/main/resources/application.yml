@@ -1,12 +1,12 @@
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3307/pet_care_db
+    url: jdbc:mysql://127.0.0.1:3307/pet_care
     username: root
     password: giabao123123
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect

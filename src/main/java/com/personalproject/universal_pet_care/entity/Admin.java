@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Entity
+@Entity(name = "admins")
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)

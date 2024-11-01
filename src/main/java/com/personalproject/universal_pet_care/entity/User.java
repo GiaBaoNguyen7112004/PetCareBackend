@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Entity
+import java.util.List;
+
+@Entity(name = "users")
 @Getter
 @Setter
 @AllArgsConstructor
