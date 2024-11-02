@@ -17,4 +17,6 @@ public class UrlMapping {
 //    Appointment API
     public static final String APPOINTMENTS = API + "/appointments";
     public static final String BOOK_APPOINTMENT = "/book-appointment";
+
+    private UrlMapping() {}
 }
