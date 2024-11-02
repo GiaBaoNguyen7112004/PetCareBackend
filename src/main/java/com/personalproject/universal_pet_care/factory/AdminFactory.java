@@ -4,7 +4,7 @@ package com.personalproject.universal_pet_care.factory;
 import com.personalproject.universal_pet_care.payload.request.RegistrationRequest;
 import com.personalproject.universal_pet_care.entity.Admin;
 import com.personalproject.universal_pet_care.mapper.UserMapper;
-import com.personalproject.universal_pet_care.repository.AdminRepository;
+import com.personalproject.universal_pet_care.repository.user.AdminRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

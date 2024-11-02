@@ -4,7 +4,7 @@ import com.personalproject.universal_pet_care.payload.request.RegistrationReques
 import com.personalproject.universal_pet_care.entity.User;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
-import com.personalproject.universal_pet_care.repository.UserRepository;
+import com.personalproject.universal_pet_care.repository.user.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,8 +28,7 @@ public class SimpleUserFactory implements UserFactory{
             case "ADMIN" -> {return adminFactory.createAdmin(registrationRequest);}
             case "VETERINARIAN" -> {return veterinarianFactory.createVeterinarian(registrationRequest);}
             case "PATIENT" -> {return patientFactory.createPatient(registrationRequest);}
+            default -> {return null;}
         }
-
-        return null;
     }
 }

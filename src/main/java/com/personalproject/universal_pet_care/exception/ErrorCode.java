@@ -12,7 +12,8 @@ import org.springframework.http.HttpStatusCode;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public enum ErrorCode {
     USER_EXIST(1000, "User existed", HttpStatus.BAD_REQUEST),
-    NO_DATA_FOUND(1001, "No data was found", HttpStatus.NOT_FOUND);
+    NO_DATA_FOUND(1001, "No data was found", HttpStatus.NOT_FOUND),
+    CANNOT_UPDATE(1002, "Resource can not be updated", HttpStatus.BAD_REQUEST);
 
     int code;
     String message;

@@ -1,4 +1,4 @@
-package com.personalproject.universal_pet_care.repository;
+package com.personalproject.universal_pet_care.repository.user;
 
 import com.personalproject.universal_pet_care.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

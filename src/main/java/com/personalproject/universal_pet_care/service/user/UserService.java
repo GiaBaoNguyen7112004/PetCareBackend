@@ -9,13 +9,12 @@ import com.personalproject.universal_pet_care.payload.request.RegistrationReques
 
 import com.personalproject.universal_pet_care.factory.UserFactory;
 import com.personalproject.universal_pet_care.payload.request.UpdateUserRequest;
-import com.personalproject.universal_pet_care.repository.UserRepository;
+import com.personalproject.universal_pet_care.repository.user.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +23,6 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class UserService implements IUserService{
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
     UserFactory userFactory;
     UserMapper userMapper;
     UserRepository userRepository;

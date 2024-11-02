@@ -3,7 +3,7 @@ package com.personalproject.universal_pet_care.factory;
 import com.personalproject.universal_pet_care.payload.request.RegistrationRequest;
 import com.personalproject.universal_pet_care.entity.Patient;
 import com.personalproject.universal_pet_care.mapper.UserMapper;
-import com.personalproject.universal_pet_care.repository.PatientRepository;
+import com.personalproject.universal_pet_care.repository.user.PatientRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

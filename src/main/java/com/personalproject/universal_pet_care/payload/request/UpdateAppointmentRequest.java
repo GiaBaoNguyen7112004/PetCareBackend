@@ -1,0 +1,18 @@
+package com.personalproject.universal_pet_care.payload.request;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class UpdateAppointmentRequest {
+    String reason;
+    LocalTime appointmentTime;
+    LocalDate appointmentDate;
+}
