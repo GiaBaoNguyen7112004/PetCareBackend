@@ -47,12 +47,11 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public boolean deleteUser(Long id)
+    public void deleteUser(Long id)
     {
-        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND));
-        userRepository.delete(user);
-
-        return true;
+        userRepository.findById(id).ifPresentOrElse(userRepository::delete,
+                () -> {throw new AppException(ErrorCode.NO_DATA_FOUND);}
+                );
     }
 
     @Override

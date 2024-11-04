@@ -2,18 +2,23 @@ package com.personalproject.universal_pet_care.service.appointment;
 
 import com.personalproject.universal_pet_care.dto.AppointmentDTO;
 import com.personalproject.universal_pet_care.entity.Appointment;
+import com.personalproject.universal_pet_care.entity.Pet;
 import com.personalproject.universal_pet_care.enums.AppointmentStatus;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
 import com.personalproject.universal_pet_care.mapper.AppointmentMapper;
-import com.personalproject.universal_pet_care.payload.request.AppointmentRequest;
+import com.personalproject.universal_pet_care.mapper.PetMapper;
+import com.personalproject.universal_pet_care.payload.request.BookAppointmentRequest;
 import com.personalproject.universal_pet_care.payload.request.UpdateAppointmentRequest;
-import com.personalproject.universal_pet_care.repository.appointment.AppointmentRepository;
+import com.personalproject.universal_pet_care.repository.AppointmentRepository;
+
 import com.personalproject.universal_pet_care.repository.user.UserRepository;
+import com.personalproject.universal_pet_care.service.pet.IPetService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,10 +29,13 @@ public class AppointmentService implements IAppointmentService {
     AppointmentMapper appointmentMapper;
     UserRepository userRepository;
     AppointmentRepository appointmentRepository;
+    PetMapper petMapper;
+    IPetService iPetService;
 
+    @Transactional
     @Override
-    public AppointmentDTO createAppointment(AppointmentRequest appointmentRequest, long senderId, long recipientId) {
-        Appointment appointment = appointmentMapper.toAppointment(appointmentRequest);
+    public AppointmentDTO createAppointment(BookAppointmentRequest bookAppointmentRequest, long senderId, long recipientId) {
+        Appointment appointment = appointmentMapper.toAppointment(bookAppointmentRequest);
 
         appointment.addSender(userRepository.findById(senderId)
                 .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND)));
@@ -36,9 +44,13 @@ public class AppointmentService implements IAppointmentService {
         appointment.setAppointmentNo();
         appointment.setStatus(AppointmentStatus.WAITING_FOR_APPROVAL);
 
-        appointmentRepository.save(appointment);
+        List<Pet> pets = bookAppointmentRequest.getRegisterPetRequests().stream().map(petMapper::toPet)
+                .toList();
+        pets.forEach(pet -> pet.setAppointment(appointment));
+        iPetService.savePetForAppointment(pets);
+        appointment.setPets(pets);
 
-        return appointmentMapper.toAppointmentDTO(appointment);
+        return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
     }
 
     @Override
@@ -61,11 +73,9 @@ public class AppointmentService implements IAppointmentService {
     }
 
     @Override
-    public boolean deleteAppointment(long id) {
-        if (userRepository.existsById(id)) {
-            appointmentRepository.deleteById(id);
-            return true;
-        } else throw new AppException(ErrorCode.NO_DATA_FOUND);
+    public void deleteAppointment(long id) {
+        appointmentRepository.findById(id).ifPresentOrElse(appointmentRepository::delete,
+                () -> {throw new AppException(ErrorCode.NO_DATA_FOUND);});
     }
 
     @Override

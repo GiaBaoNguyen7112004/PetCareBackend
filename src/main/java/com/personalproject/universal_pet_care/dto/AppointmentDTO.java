@@ -2,16 +2,14 @@ package com.personalproject.universal_pet_care.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.personalproject.universal_pet_care.entity.User;
-import com.personalproject.universal_pet_care.enums.AppointmentStatus;
-import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,4 +35,6 @@ public class AppointmentDTO {
 
     UserDTO sender;
     UserDTO recipient;
+
+    List<PetDTO> pets;
 }

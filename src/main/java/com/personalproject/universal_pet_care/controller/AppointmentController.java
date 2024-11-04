@@ -1,7 +1,7 @@
 package com.personalproject.universal_pet_care.controller;
 
 
-import com.personalproject.universal_pet_care.payload.request.AppointmentRequest;
+import com.personalproject.universal_pet_care.payload.request.BookAppointmentRequest;
 import com.personalproject.universal_pet_care.payload.request.UpdateAppointmentRequest;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
 import com.personalproject.universal_pet_care.service.appointment.IAppointmentService;
@@ -25,11 +25,11 @@ public class AppointmentController {
     IAppointmentService iAppointmentService;
 
     @PostMapping(UrlMapping.BOOK_APPOINTMENT)
-    public ResponseEntity<ApiResponse> createAppointment(@RequestBody AppointmentRequest appointmentRequest,
+    public ResponseEntity<ApiResponse> createAppointment(@RequestBody BookAppointmentRequest bookAppointmentRequest,
                                                @RequestParam long senderId, @RequestParam long recipientId)
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iAppointmentService.createAppointment(appointmentRequest, senderId, recipientId))
+                .data(iAppointmentService.createAppointment(bookAppointmentRequest, senderId, recipientId))
                 .message(FeedbackMessage.CREATE_SUCCESS)
                 .build();
 
@@ -62,8 +62,8 @@ public class AppointmentController {
     @DeleteMapping(UrlMapping.DELETE_APPOINTMENT)
     public ResponseEntity<ApiResponse> deleteAppointment(@PathVariable long id)
     {
+        iAppointmentService.deleteAppointment(id);
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iAppointmentService.deleteAppointment(id))
                 .message(FeedbackMessage.DELETE_SUCCESS)
                 .build();
 

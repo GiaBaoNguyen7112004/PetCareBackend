@@ -10,7 +10,7 @@ public interface IUserService {
     UserDTO register(RegistrationRequest registrationRequest);
     UserDTO updateUser(Long id, UpdateUserRequest updateUserRequest);
     UserDTO getUserById(Long id);
-    boolean deleteUser(Long id);
+    void deleteUser(Long id);
 
     List<UserDTO> getAllUsers();
 }

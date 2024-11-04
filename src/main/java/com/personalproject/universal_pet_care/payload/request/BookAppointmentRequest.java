@@ -1,23 +1,19 @@
 package com.personalproject.universal_pet_care.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.personalproject.universal_pet_care.enums.AppointmentStatus;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AppointmentRequest {
+public class BookAppointmentRequest {
     String reason;
 
     @JsonFormat(pattern = "HH:mm")
@@ -26,6 +22,5 @@ public class AppointmentRequest {
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate appointmentDate;
 
-    long senderId;
-    long recipientId;
+    List<RegisterPetRequest> registerPetRequests;
 }

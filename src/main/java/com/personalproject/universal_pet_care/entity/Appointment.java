@@ -5,14 +5,11 @@ import com.personalproject.universal_pet_care.enums.AppointmentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 @Entity(name = "appointments")
 @Getter
@@ -49,14 +46,16 @@ public class Appointment {
     @ManyToOne
     User recipient;
 
+    @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
+    List<Pet> pets;
+
     public void addSender(User sender)
     {
-        this.sender = (Patient) sender;
-        if(sender instanceof Patient)
+        this.sender = sender;
+        if(sender instanceof Patient patient)
         {
-            Patient patient = (Patient) sender;
             if(Objects.isNull(patient.getAppointments()))
-                patient.setAppointments(new ArrayList<Appointment>());
+                patient.setAppointments(new ArrayList<>());
 
             patient.getAppointments().add(this);
         }
@@ -64,12 +63,11 @@ public class Appointment {
 
     public void addRecipient(User recipient)
     {
-        this.recipient = (Veterinarian) recipient;
-        if(recipient instanceof Veterinarian)
+        this.recipient = recipient;
+        if(recipient instanceof Veterinarian veterinarian)
         {
-            Veterinarian veterinarian = (Veterinarian) recipient;
             if(Objects.isNull(veterinarian.getAppointments()))
-                veterinarian.setAppointments(new ArrayList<Appointment>());
+                veterinarian.setAppointments(new ArrayList<>());
 
             veterinarian.getAppointments().add(this);
         }
@@ -77,7 +75,7 @@ public class Appointment {
 
     public void setAppointmentNo()
     {
-        this.appointmentNo = String.valueOf(new Random().nextLong()).substring(1,11);
+        this.appointmentNo = String.valueOf(UUID.randomUUID()).substring(1,11);
     }
 
 }
