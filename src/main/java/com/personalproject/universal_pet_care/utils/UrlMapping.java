@@ -30,6 +30,13 @@ public class UrlMapping {
     public static final String DELETE_PET = "/pet/{id}";
     public static final String GET_PET_BY_ID = "/pet/{id}";
 
+//    Photo API
+    public static final String PHOTOS = API + "/photos";
+    public static final String UPLOAD_PHOTO = "/upload-photo";
+    public static final String UPDATE_PHOTO = "/photo/{id}";
+    public static final String DELETE_PHOTO = "/photo/{photoId}/user/{userId}";
+    public static final String GET_PHOTO_BY_ID = "/photo/{id}";
+
 //    constructor
     private UrlMapping() {}
 }

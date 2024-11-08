@@ -1,11 +1,11 @@
 package com.personalproject.universal_pet_care.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+
 
 @Entity(name = "users")
 @Getter
@@ -26,4 +26,7 @@ public class User {
     String password;
     String userType;
     boolean isEnabled;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    Photo photo;
 }

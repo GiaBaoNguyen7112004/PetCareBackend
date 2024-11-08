@@ -1,5 +1,3 @@
-
-tạo service, controller
-sửa return api response
-refactor bookappointment service và bookappointment request
-annotation transtraction
+tạo entity photo
+annotation lob với blob image
+tạo mapping onetoone trong user
