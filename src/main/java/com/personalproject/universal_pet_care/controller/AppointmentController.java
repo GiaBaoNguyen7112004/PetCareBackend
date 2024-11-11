@@ -1,8 +1,8 @@
 package com.personalproject.universal_pet_care.controller;
 
 
-import com.personalproject.universal_pet_care.payload.request.BookAppointmentRequest;
-import com.personalproject.universal_pet_care.payload.request.UpdateAppointmentRequest;
+import com.personalproject.universal_pet_care.payload.request.AppointmentBookingRequest;
+import com.personalproject.universal_pet_care.payload.request.AppointmentUpdatingRequest;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
 import com.personalproject.universal_pet_care.service.appointment.IAppointmentService;
 import com.personalproject.universal_pet_care.utils.FeedbackMessage;
@@ -25,11 +25,11 @@ public class AppointmentController {
     IAppointmentService iAppointmentService;
 
     @PostMapping(UrlMapping.BOOK_APPOINTMENT)
-    public ResponseEntity<ApiResponse> createAppointment(@RequestBody BookAppointmentRequest bookAppointmentRequest,
+    public ResponseEntity<ApiResponse> createAppointment(@RequestBody AppointmentBookingRequest appointmentBookingRequest,
                                                @RequestParam long senderId, @RequestParam long recipientId)
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iAppointmentService.createAppointment(bookAppointmentRequest, senderId, recipientId))
+                .data(iAppointmentService.createAppointment(appointmentBookingRequest, senderId, recipientId))
                 .message(FeedbackMessage.CREATE_SUCCESS)
                 .build();
 
@@ -49,10 +49,10 @@ public class AppointmentController {
 
     @PutMapping(UrlMapping.UPDATE_APPOINTMENT)
     public ResponseEntity<ApiResponse> updateAppointment(@PathVariable long id,
-                                               @RequestBody UpdateAppointmentRequest updateAppointmentRequest)
+                                               @RequestBody AppointmentUpdatingRequest appointmentUpdatingRequest)
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iAppointmentService.updateAppointment(id, updateAppointmentRequest))
+                .data(iAppointmentService.updateAppointment(id, appointmentUpdatingRequest))
                 .message(FeedbackMessage.UPDATE_SUCCESS)
                 .build();
 

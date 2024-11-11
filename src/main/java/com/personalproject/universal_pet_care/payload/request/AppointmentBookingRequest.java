@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BookAppointmentRequest {
+public class AppointmentBookingRequest {
     String reason;
 
     @JsonFormat(pattern = "HH:mm")
@@ -22,5 +22,5 @@ public class BookAppointmentRequest {
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate appointmentDate;
 
-    List<RegisterPetRequest> registerPetRequests;
+    List<PetRegistrationRequest> petRegistrationRequests;
 }

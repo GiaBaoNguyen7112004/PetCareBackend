@@ -4,8 +4,7 @@ import com.personalproject.universal_pet_care.dto.UserDTO;
 import com.personalproject.universal_pet_care.entity.Veterinarian;
 import com.personalproject.universal_pet_care.payload.request.RegistrationRequest;
 import com.personalproject.universal_pet_care.entity.User;
-import com.personalproject.universal_pet_care.payload.request.UpdateUserRequest;
-import lombok.extern.slf4j.Slf4j;
+import com.personalproject.universal_pet_care.payload.request.UserUpdatingRequest;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -26,11 +25,11 @@ public interface UserMapper {
         }
     }
 
-    void updateUser(@MappingTarget  User user, UpdateUserRequest updateUserRequest);
+    void updateUser(@MappingTarget  User user, UserUpdatingRequest userUpdatingRequest);
     @AfterMapping
-    default void setUpdateAdditionalFields(@MappingTarget User user, UpdateUserRequest updateUserRequest) {
+    default void setUpdateAdditionalFields(@MappingTarget User user, UserUpdatingRequest userUpdatingRequest) {
         if(user instanceof Veterinarian veterinarian) {
-            veterinarian.setSpecialization(updateUserRequest.getSpecialization());
+            veterinarian.setSpecialization(userUpdatingRequest.getSpecialization());
         }
     }
 }

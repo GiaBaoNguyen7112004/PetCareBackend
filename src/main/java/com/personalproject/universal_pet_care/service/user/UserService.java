@@ -8,7 +8,7 @@ import com.personalproject.universal_pet_care.mapper.UserMapper;
 import com.personalproject.universal_pet_care.payload.request.RegistrationRequest;
 
 import com.personalproject.universal_pet_care.factory.UserFactory;
-import com.personalproject.universal_pet_care.payload.request.UpdateUserRequest;
+import com.personalproject.universal_pet_care.payload.request.UserUpdatingRequest;
 import com.personalproject.universal_pet_care.repository.user.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +33,9 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public UserDTO updateUser(Long id, UpdateUserRequest updateUserRequest) {
+    public UserDTO updateUser(Long id, UserUpdatingRequest userUpdatingRequest) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND));
-        userMapper.updateUser(user, updateUserRequest);
+        userMapper.updateUser(user, userUpdatingRequest);
 
         return userMapper.toUserDTO(userRepository.save(user));
     }

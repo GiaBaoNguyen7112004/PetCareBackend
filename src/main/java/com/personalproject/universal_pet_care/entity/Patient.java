@@ -14,4 +14,7 @@ import java.util.List;
 public class Patient extends User{
     @OneToMany(mappedBy = "sender")
     List<Appointment> appointments;
+
+    @OneToMany(mappedBy = "reviewer")
+    List<Review> reviews;
 }

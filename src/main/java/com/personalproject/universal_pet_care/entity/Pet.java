@@ -20,6 +20,7 @@ public class Pet {
     String breed;
     int age;
 
+    @JoinColumn(name = "appointment_id")
     @ManyToOne
     Appointment appointment;
 }

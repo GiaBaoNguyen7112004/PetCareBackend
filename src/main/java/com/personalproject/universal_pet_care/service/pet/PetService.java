@@ -6,7 +6,7 @@ import com.personalproject.universal_pet_care.entity.Pet;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
 import com.personalproject.universal_pet_care.mapper.PetMapper;
-import com.personalproject.universal_pet_care.payload.request.UpdatePetRequest;
+import com.personalproject.universal_pet_care.payload.request.PetUpdatingRequest;
 import com.personalproject.universal_pet_care.repository.PetRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +29,10 @@ public class PetService implements IPetService {
     }
 
     @Override
-    public PetDTO updatePet(long id, UpdatePetRequest updatePetRequest)
+    public PetDTO updatePet(long id, PetUpdatingRequest petUpdatingRequest)
     {
         Pet pet = petRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND));
-        petMapper.updatePet(pet, updatePetRequest);
+        petMapper.updatePet(pet, petUpdatingRequest);
 
         return petMapper.toPetDTO(petRepository.save(pet));
     }

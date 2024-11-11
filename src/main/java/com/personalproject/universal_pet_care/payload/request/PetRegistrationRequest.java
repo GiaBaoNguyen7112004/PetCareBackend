@@ -1,16 +1,14 @@
 package com.personalproject.universal_pet_care.payload.request;
 
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UpdatePetRequest {
+public class PetRegistrationRequest {
     String name;
     String type;
     String color;

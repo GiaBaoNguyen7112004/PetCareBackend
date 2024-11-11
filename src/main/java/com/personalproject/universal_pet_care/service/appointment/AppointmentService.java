@@ -8,8 +8,8 @@ import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
 import com.personalproject.universal_pet_care.mapper.AppointmentMapper;
 import com.personalproject.universal_pet_care.mapper.PetMapper;
-import com.personalproject.universal_pet_care.payload.request.BookAppointmentRequest;
-import com.personalproject.universal_pet_care.payload.request.UpdateAppointmentRequest;
+import com.personalproject.universal_pet_care.payload.request.AppointmentBookingRequest;
+import com.personalproject.universal_pet_care.payload.request.AppointmentUpdatingRequest;
 import com.personalproject.universal_pet_care.repository.AppointmentRepository;
 
 import com.personalproject.universal_pet_care.repository.user.UserRepository;
@@ -34,8 +34,8 @@ public class AppointmentService implements IAppointmentService {
 
     @Transactional
     @Override
-    public AppointmentDTO createAppointment(BookAppointmentRequest bookAppointmentRequest, long senderId, long recipientId) {
-        Appointment appointment = appointmentMapper.toAppointment(bookAppointmentRequest);
+    public AppointmentDTO createAppointment(AppointmentBookingRequest appointmentBookingRequest, long senderId, long recipientId) {
+        Appointment appointment = appointmentMapper.toAppointment(appointmentBookingRequest);
 
         appointment.addSender(userRepository.findById(senderId)
                 .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND)));
@@ -44,7 +44,7 @@ public class AppointmentService implements IAppointmentService {
         appointment.setAppointmentNo();
         appointment.setStatus(AppointmentStatus.WAITING_FOR_APPROVAL);
 
-        List<Pet> pets = bookAppointmentRequest.getRegisterPetRequests().stream().map(petMapper::toPet)
+        List<Pet> pets = appointmentBookingRequest.getPetRegistrationRequests().stream().map(petMapper::toPet)
                 .toList();
         pets.forEach(pet -> pet.setAppointment(appointment));
         iPetService.savePetForAppointment(pets);
@@ -59,7 +59,7 @@ public class AppointmentService implements IAppointmentService {
     }
 
     @Override
-    public AppointmentDTO updateAppointment(long id, UpdateAppointmentRequest updateAppointmentRequest) {
+    public AppointmentDTO updateAppointment(long id, AppointmentUpdatingRequest appointmentUpdatingRequest) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND));
 
@@ -67,7 +67,7 @@ public class AppointmentService implements IAppointmentService {
             throw new AppException(ErrorCode.CANNOT_UPDATE);
         }
 
-        appointmentMapper.updateAppointment(appointment, updateAppointmentRequest);
+        appointmentMapper.updateAppointment(appointment, appointmentUpdatingRequest);
 
         return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
     }

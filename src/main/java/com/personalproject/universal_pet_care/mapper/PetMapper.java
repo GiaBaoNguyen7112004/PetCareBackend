@@ -4,8 +4,8 @@ import com.personalproject.universal_pet_care.dto.PetDTO;
 
 import com.personalproject.universal_pet_care.entity.Pet;
 
-import com.personalproject.universal_pet_care.payload.request.RegisterPetRequest;
-import com.personalproject.universal_pet_care.payload.request.UpdatePetRequest;
+import com.personalproject.universal_pet_care.payload.request.PetRegistrationRequest;
+import com.personalproject.universal_pet_care.payload.request.PetUpdatingRequest;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -14,8 +14,8 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", uses = UserMapper.class)
 public interface PetMapper {
-    Pet toPet(RegisterPetRequest registerPetRequest);
-    void updatePet(@MappingTarget Pet pet, UpdatePetRequest updatePetRequest);
+    Pet toPet(PetRegistrationRequest petRegistrationRequest);
+    void updatePet(@MappingTarget Pet pet, PetUpdatingRequest petUpdatingRequest);
     PetDTO toPetDTO(Pet pet);
     @AfterMapping
     default void setAdditionalFields(Pet pet, @MappingTarget PetDTO.PetDTOBuilder petDTO){

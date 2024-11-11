@@ -13,7 +13,12 @@ import org.springframework.http.HttpStatusCode;
 public enum ErrorCode {
     USER_EXIST(1000, "User existed", HttpStatus.BAD_REQUEST),
     NO_DATA_FOUND(1001, "No data was found", HttpStatus.NOT_FOUND),
-    CANNOT_UPDATE(1002, "Resource can not be updated", HttpStatus.BAD_REQUEST);
+    CANNOT_UPDATE(1002, "Resource can not be updated", HttpStatus.BAD_REQUEST),
+    REVIEW_YOURSELF(1003, "Veterinarian can not review himself", HttpStatus.BAD_REQUEST),
+    ALREADY_REVIEWED(1004,"You already reviewed this veterinarian", HttpStatus.BAD_REQUEST),
+    REVIEW_NOT_COMPLETED(1005, "Only reviewer who has complete appointment can review",
+            HttpStatus.BAD_REQUEST);
+
 
     int code;
     String message;

@@ -1,7 +1,6 @@
 package com.personalproject.universal_pet_care.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,9 +11,10 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PhotoDTO {
+public class ReviewDTO {
     long id;
-    String fileName;
-    String fileType;
-    byte[] image;
+    String feedback;
+    int stars;
+    UserDTO patient;
+    UserDTO veterinarian;
 }

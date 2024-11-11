@@ -3,15 +3,16 @@ package com.personalproject.universal_pet_care.payload.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RegisterPetRequest {
-    String name;
-    String type;
-    String color;
-    String breed;
-    int age;
+public class AppointmentUpdatingRequest {
+    String reason;
+    LocalTime appointmentTime;
+    LocalDate appointmentDate;
 }

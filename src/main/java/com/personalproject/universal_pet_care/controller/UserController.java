@@ -2,7 +2,7 @@ package com.personalproject.universal_pet_care.controller;
 
 
 import com.personalproject.universal_pet_care.payload.request.RegistrationRequest;
-import com.personalproject.universal_pet_care.payload.request.UpdateUserRequest;
+import com.personalproject.universal_pet_care.payload.request.UserUpdatingRequest;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
 import com.personalproject.universal_pet_care.service.user.IUserService;
 
@@ -33,10 +33,10 @@ public class UserController {
     }
 
     @PutMapping(UrlMapping.UPDATE_USER)
-    public ResponseEntity<ApiResponse> updateUser(@PathVariable Long id, @RequestBody UpdateUserRequest updateUserRequest)
+    public ResponseEntity<ApiResponse> updateUser(@PathVariable Long id, @RequestBody UserUpdatingRequest userUpdatingRequest)
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iUserService.updateUser(id, updateUserRequest))
+                .data(iUserService.updateUser(id, userUpdatingRequest))
                 .message(FeedbackMessage.UPDATE_SUCCESS)
                 .build();
 

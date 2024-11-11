@@ -18,4 +18,7 @@ public class Veterinarian extends User{
 
     @OneToMany(mappedBy = "recipient")
     List<Appointment> appointments;
+
+    @OneToMany(mappedBy = "veterinarian")
+    List<Review> reviews;
 }
