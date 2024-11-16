@@ -15,6 +15,6 @@ public class ReviewDTO {
     long id;
     String feedback;
     int stars;
-    UserDTO patient;
+    UserDTO reviewer;
     UserDTO veterinarian;
 }

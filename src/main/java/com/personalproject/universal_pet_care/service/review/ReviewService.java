@@ -7,13 +7,17 @@ import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
 import com.personalproject.universal_pet_care.mapper.ReviewMapper;
 import com.personalproject.universal_pet_care.payload.request.ReviewSubmissionRequest;
+import com.personalproject.universal_pet_care.payload.request.ReviewUpdatingRequest;
 import com.personalproject.universal_pet_care.repository.AppointmentRepository;
 import com.personalproject.universal_pet_care.repository.ReviewRepository;
 import com.personalproject.universal_pet_care.repository.user.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -25,14 +29,14 @@ public class ReviewService implements IReviewService{
     UserRepository userRepository;
 
     @Override
-    public ReviewDTO createReview(ReviewSubmissionRequest reviewSubmissionRequest, long reviewerId, long veterinarianId)
+    public ReviewDTO submitReview(ReviewSubmissionRequest reviewSubmissionRequest, long reviewerId, long veterinarianId)
     {
         if(reviewerId == veterinarianId) throw new AppException(ErrorCode.REVIEW_YOURSELF);
 
         if(reviewRepository.existsByReviewerIdAndVeterinarianId(reviewerId, veterinarianId))
             throw new AppException(ErrorCode.ALREADY_REVIEWED);
 
-        if(appointmentRepository.existsBySenderIdAndRecipientIdAndStatus(reviewerId, veterinarianId,
+        if(!appointmentRepository.existsBySenderIdAndRecipientIdAndStatus(reviewerId, veterinarianId,
                 AppointmentStatus.COMPLETED))
             throw new AppException(ErrorCode.REVIEW_NOT_COMPLETED);
 
@@ -44,5 +48,37 @@ public class ReviewService implements IReviewService{
                 .build();
 
         return reviewMapper.toReviewDTO(reviewRepository.save(review));
+    }
+
+    @Override
+    public double getAverageStarForVet(long veterinarianId)
+    {
+        return reviewRepository.findAllByVeterinarianId(veterinarianId).stream().mapToInt(Review::getStars)
+                .average().orElse(0);
+    }
+
+    @Override
+    public ReviewDTO updateReview(long id, ReviewUpdatingRequest reviewUpdatingRequest)
+    {
+        return reviewRepository.findById(id).map(review -> {
+                    reviewMapper.updateReview(review, reviewUpdatingRequest);
+                    return reviewMapper.toReviewDTO(reviewRepository.save(review));
+                }
+        ).orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND));
+    }
+
+    @Override
+    public List<ReviewDTO> getReviewsByUserId(long userId, int pageNumber, int pageSize)
+    {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        return reviewRepository.findReviewsByUserId(userId, pageRequest).getContent().stream()
+                .map(reviewMapper::toReviewDTO).toList();
+    }
+
+    @Override
+    public void deleteReview(long id)
+    {
+        reviewRepository.findById(id).ifPresentOrElse(reviewRepository::delete,
+                () -> {throw new AppException(ErrorCode.NO_DATA_FOUND);});
     }
 }

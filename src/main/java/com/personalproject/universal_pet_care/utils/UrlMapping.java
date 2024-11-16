@@ -37,6 +37,14 @@ public class UrlMapping {
     public static final String DELETE_PHOTO = "/photo/{photoId}/user/{userId}";
     public static final String GET_PHOTO_BY_ID = "/photo/{id}";
 
+//    Review API
+    public static final String REVIEWS = API + "/reviews";
+    public static final String SUBMIT_REVIEW = "/submit-review/{reviewerId}/{veterinarianId}";
+    public static final String UPDATE_REVIEW = "/review/{id}";
+    public static final String DELETE_REVIEW = "review/{id}";
+    public static final String GET_AVERAGE_STARS_FOR_VET = "/vet/avg-star/{veterinarianId}";
+    public static final String GET_REVIEWS_BY_ID = "/user/{id}";
+
 //    constructor
     private UrlMapping() {}
 }

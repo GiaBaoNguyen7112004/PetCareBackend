@@ -7,7 +7,7 @@ import com.personalproject.universal_pet_care.payload.request.PetUpdatingRequest
 import java.util.List;
 
 public interface IPetService {
-    List<Pet> savePetForAppointment(List<Pet> pets);
+    void savePetForAppointment(List<Pet> pets);
 
     PetDTO updatePet(long id, PetUpdatingRequest petUpdatingRequest);
 

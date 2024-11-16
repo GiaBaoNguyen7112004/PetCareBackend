@@ -15,9 +15,9 @@ public enum ErrorCode {
     NO_DATA_FOUND(1001, "No data was found", HttpStatus.NOT_FOUND),
     CANNOT_UPDATE(1002, "Resource can not be updated", HttpStatus.BAD_REQUEST),
     REVIEW_YOURSELF(1003, "Veterinarian can not review himself", HttpStatus.BAD_REQUEST),
-    ALREADY_REVIEWED(1004,"You already reviewed this veterinarian", HttpStatus.BAD_REQUEST),
+    ALREADY_REVIEWED(1004,"You already reviewed this veterinarian", HttpStatus.CONFLICT),
     REVIEW_NOT_COMPLETED(1005, "Only reviewer who has complete appointment can review",
-            HttpStatus.BAD_REQUEST);
+            HttpStatus.NOT_ACCEPTABLE);
 
 
     int code;

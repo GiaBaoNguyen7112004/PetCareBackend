@@ -23,9 +23,9 @@ public class PetService implements IPetService {
     PetMapper petMapper;
 
     @Override
-    public List<Pet> savePetForAppointment(List<Pet> pets)
+    public void savePetForAppointment(List<Pet> pets)
     {
-        return petRepository.saveAll(pets);
+        petRepository.saveAll(pets);
     }
 
     @Override
