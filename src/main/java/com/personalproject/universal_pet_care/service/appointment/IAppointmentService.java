@@ -18,4 +18,6 @@ public interface IAppointmentService {
     AppointmentDTO getAppointmentById(long id);
 
     AppointmentDTO getAppointmentByNo(String no);
+
+    List<AppointmentDTO> getAppointmentByUserId(Long id);
 }

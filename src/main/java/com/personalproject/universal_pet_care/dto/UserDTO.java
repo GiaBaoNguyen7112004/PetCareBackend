@@ -1,9 +1,10 @@
 package com.personalproject.universal_pet_care.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,4 +23,8 @@ public class UserDTO {
     String userType;
     boolean isEnabled;
     String specialization;
+    PhotoDTO photo;
+    Double averageStars;
+    List<ReviewDTO> reviewDTOs;
+    List<AppointmentDTO> appointmentDTOs;
 }

@@ -51,7 +51,7 @@ public class ReviewService implements IReviewService{
     }
 
     @Override
-    public double getAverageStarForVet(long veterinarianId)
+    public Double getAverageStarForVet(Long veterinarianId)
     {
         return reviewRepository.findAllByVeterinarianId(veterinarianId).stream().mapToInt(Review::getStars)
                 .average().orElse(0);
@@ -68,10 +68,9 @@ public class ReviewService implements IReviewService{
     }
 
     @Override
-    public List<ReviewDTO> getReviewsByUserId(long userId, int pageNumber, int pageSize)
+    public List<ReviewDTO> getReviewsByUserId(Long userId, int pageNumber, int pageSize)
     {
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
-        return reviewRepository.findReviewsByUserId(userId, pageRequest).getContent().stream()
+        return reviewRepository.findReviewsByUserId(userId, PageRequest.of(pageNumber, pageSize)).getContent().stream()
                 .map(reviewMapper::toReviewDTO).toList();
     }
 
@@ -80,5 +79,13 @@ public class ReviewService implements IReviewService{
     {
         reviewRepository.findById(id).ifPresentOrElse(reviewRepository::delete,
                 () -> {throw new AppException(ErrorCode.NO_DATA_FOUND);});
+    }
+
+    @Override
+    public List<ReviewDTO> getAllReviewsOfUser(Long userId)
+    {
+        return reviewRepository.findReviewsByUserId(userId, PageRequest.of(0, Integer.MAX_VALUE))
+                .getContent().stream()
+                .map(reviewMapper::toReviewDTO).toList();
     }
 }

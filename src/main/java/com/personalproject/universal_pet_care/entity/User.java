@@ -1,11 +1,8 @@
 package com.personalproject.universal_pet_care.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-
 
 @Entity(name = "users")
 @Getter
@@ -17,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
     String firstName;
     String lastName;
     String gender;

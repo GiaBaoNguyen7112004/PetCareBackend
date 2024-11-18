@@ -13,4 +13,5 @@ public interface IUserService {
     void deleteUser(Long id);
 
     List<UserDTO> getAllUsers();
+    UserDTO getUserDetails(Long userId);
 }

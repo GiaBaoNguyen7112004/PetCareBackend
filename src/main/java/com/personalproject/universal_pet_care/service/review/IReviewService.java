@@ -8,11 +8,13 @@ import java.util.List;
 
 public interface IReviewService{
     ReviewDTO submitReview(ReviewSubmissionRequest reviewSubmissionRequest, long reviewerId, long veterinarianId);
-    double getAverageStarForVet(long veterinarianId);
+    Double getAverageStarForVet(Long veterinarianId);
 
     ReviewDTO updateReview(long id, ReviewUpdatingRequest reviewUpdatingRequest);
 
-    List<ReviewDTO> getReviewsByUserId(long userId, int pageNumber, int pageSize);
+    List<ReviewDTO> getReviewsByUserId(Long userId, int pageNumber, int pageSize);
 
     void deleteReview(long id);
+
+    List<ReviewDTO> getAllReviewsOfUser(Long userId);
 }

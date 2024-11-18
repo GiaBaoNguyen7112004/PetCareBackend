@@ -10,12 +10,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = PhotoMapper.class)
 public interface UserMapper {
-
-
     void toUser(@MappingTarget  User user, RegistrationRequest registrationRequest);
 
+    @Mapping(target = "photo", source = "photo")
     @Mapping(target = "isEnabled", source = "enabled")
     UserDTO toUserDTO(User user);
     @AfterMapping

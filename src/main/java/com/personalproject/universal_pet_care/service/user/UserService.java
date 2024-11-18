@@ -2,6 +2,7 @@ package com.personalproject.universal_pet_care.service.user;
 
 import com.personalproject.universal_pet_care.dto.UserDTO;
 import com.personalproject.universal_pet_care.entity.User;
+import com.personalproject.universal_pet_care.entity.Veterinarian;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
 import com.personalproject.universal_pet_care.mapper.UserMapper;
@@ -10,6 +11,8 @@ import com.personalproject.universal_pet_care.payload.request.RegistrationReques
 import com.personalproject.universal_pet_care.factory.UserFactory;
 import com.personalproject.universal_pet_care.payload.request.UserUpdatingRequest;
 import com.personalproject.universal_pet_care.repository.user.UserRepository;
+import com.personalproject.universal_pet_care.service.appointment.IAppointmentService;
+import com.personalproject.universal_pet_care.service.review.IReviewService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,6 +29,8 @@ public class UserService implements IUserService{
     UserFactory userFactory;
     UserMapper userMapper;
     UserRepository userRepository;
+    IReviewService iReviewService;
+    IAppointmentService iAppointmentService;
 
     @Override
     public UserDTO register(RegistrationRequest registrationRequest) {
@@ -43,15 +48,15 @@ public class UserService implements IUserService{
     @Override
     public UserDTO getUserById(Long id)
     {
-        return userMapper.toUserDTO(userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND)));
+        return userMapper.toUserDTO(userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND)));
     }
 
     @Override
     public void deleteUser(Long id)
     {
         userRepository.findById(id).ifPresentOrElse(userRepository::delete,
-                () -> {throw new AppException(ErrorCode.NO_DATA_FOUND);}
-                );
+                () -> {throw new AppException(ErrorCode.NO_DATA_FOUND);});
     }
 
     @Override
@@ -60,4 +65,20 @@ public class UserService implements IUserService{
         return userRepository.findAll().stream().map(userMapper::toUserDTO).toList();
     }
 
+    @Override
+    public UserDTO getUserDetails(Long userId)
+    {
+        return userRepository.findById(userId).map(user -> {
+            UserDTO userDTO = userMapper.toUserDTO(user);
+            if(user instanceof Veterinarian)
+            {
+                userDTO.setAverageStars(iReviewService.getAverageStarForVet(userId));
+            }
+
+            userDTO.setAppointmentDTOs(iAppointmentService.getAppointmentByUserId(userId));
+            userDTO.setReviewDTOs(iReviewService.getAllReviewsOfUser(userId));
+
+            return userDTO;
+        }).orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND));
+    }
 }

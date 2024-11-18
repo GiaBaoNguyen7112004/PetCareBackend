@@ -16,7 +16,7 @@ import lombok.experimental.FieldDefaults;
 public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
     String fileName;
     String fileType;
 

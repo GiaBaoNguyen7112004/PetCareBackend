@@ -75,4 +75,15 @@ public class UserController {
 
         return ResponseEntity.ok().body(apiResponse);
     }
+
+    @GetMapping(UrlMapping.GET_USER_DETAILS)
+    public ResponseEntity<ApiResponse> getUserDetails(@PathVariable Long id)
+    {
+        ApiResponse apiResponse = ApiResponse.builder()
+                .data(iUserService.getUserDetails(id))
+                .message(FeedbackMessage.GET_SUCCESS)
+                .build();
+
+        return ResponseEntity.ok().body(apiResponse);
+    }
 }

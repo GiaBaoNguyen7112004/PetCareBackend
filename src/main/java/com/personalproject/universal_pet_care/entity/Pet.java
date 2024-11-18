@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
     String name;
     String type;
     String color;

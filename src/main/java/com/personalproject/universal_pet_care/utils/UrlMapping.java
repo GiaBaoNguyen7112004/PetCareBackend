@@ -13,6 +13,7 @@ public class UrlMapping {
     public static final String GET_USER_BY_ID = "/user/{id}";
     public static final String DELETE_USER_BY_ID = "/user/{id}";
     public static final String GET_ALL_USERS = "/all-users";
+    public static final String GET_USER_DETAILS = "/user/details/{id}";
 
 //    Appointment API
     public static final String APPOINTMENTS = API + "/appointments";

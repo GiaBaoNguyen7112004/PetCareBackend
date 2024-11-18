@@ -89,4 +89,10 @@ public class AppointmentService implements IAppointmentService {
         return appointmentMapper.toAppointmentDTO(appointmentRepository.findByAppointmentNo(no)
                 .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND)));
     }
+
+    @Override
+    public List<AppointmentDTO> getAppointmentByUserId(Long id)
+    {
+        return appointmentRepository.findByUserId(id).stream().map(appointmentMapper::toAppointmentDTO).toList();
+    }
 }
