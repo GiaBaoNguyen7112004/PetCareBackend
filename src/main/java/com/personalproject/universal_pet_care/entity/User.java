@@ -19,7 +19,10 @@ public class User {
     String lastName;
     String gender;
     String phoneNumber;
+
+    @Column(name = "email", unique = true, columnDefinition = "VARCHAR(100) COLLATE utf8mb4_unicode_ci")
     String email;
+
     String password;
     String userType;
     boolean isEnabled;

@@ -1,4 +1,5 @@
-trong userDTO có 1 list các reviewDTO và 1 list các appointmentDTO
-trong 1 appointmentDTO có 1 list các PetDTO
-có 1 photoDTO
-nếu là bác sĩ thêm 1 average rating
+ma hoa pw
+RestAdvice
+authorization
+validate
+refreshtoken

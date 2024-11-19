@@ -8,6 +8,7 @@ import com.personalproject.universal_pet_care.repository.user.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,12 +24,21 @@ public class SimpleUserFactory implements UserFactory{
     public User createUser(RegistrationRequest registrationRequest) {
         if(userRepository.existsByEmail(registrationRequest.getEmail())) throw new AppException(ErrorCode.USER_EXIST);
 
-        switch (registrationRequest.getUserType())
-        {
-            case "ADMIN" -> {return adminFactory.createAdmin(registrationRequest);}
-            case "VETERINARIAN" -> {return veterinarianFactory.createVeterinarian(registrationRequest);}
-            case "PATIENT" -> {return patientFactory.createPatient(registrationRequest);}
-            default -> {return null;}
-        }
+        try {
+            switch (registrationRequest.getUserType()) {
+                case "ADMIN" -> {
+                    return adminFactory.createAdmin(registrationRequest);
+                }
+                case "VETERINARIAN" -> {
+                    return veterinarianFactory.createVeterinarian(registrationRequest);
+                }
+                case "PATIENT" -> {
+                    return patientFactory.createPatient(registrationRequest);
+                }
+                default -> {
+                    return null;
+                }
+            }
+        } catch (DataIntegrityViolationException e) {throw new AppException(ErrorCode.USER_EXIST);}
     }
 }
