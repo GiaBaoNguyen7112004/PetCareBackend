@@ -4,7 +4,7 @@ package com.personalproject.universal_pet_care.controller;
 import com.personalproject.universal_pet_care.payload.request.AppointmentBookingRequest;
 import com.personalproject.universal_pet_care.payload.request.AppointmentUpdatingRequest;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
-import com.personalproject.universal_pet_care.service.appointment.IAppointmentService;
+import com.personalproject.universal_pet_care.service.appointment.AppointmentService;
 import com.personalproject.universal_pet_care.utils.FeedbackMessage;
 import com.personalproject.universal_pet_care.utils.UrlMapping;
 import lombok.AccessLevel;
@@ -22,14 +22,14 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class AppointmentController {
-    IAppointmentService iAppointmentService;
+    AppointmentService appointmentService;
 
     @PostMapping(UrlMapping.BOOK_APPOINTMENT)
     public ResponseEntity<ApiResponse> createAppointment(@RequestBody AppointmentBookingRequest appointmentBookingRequest,
                                                @RequestParam long senderId, @RequestParam long recipientId)
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iAppointmentService.createAppointment(appointmentBookingRequest, senderId, recipientId))
+                .data(appointmentService.createAppointment(appointmentBookingRequest, senderId, recipientId))
                 .message(FeedbackMessage.CREATE_SUCCESS)
                 .build();
 
@@ -40,7 +40,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> getAllAppointments()
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iAppointmentService.getAllAppointments())
+                .data(appointmentService.getAllAppointments())
                 .message(FeedbackMessage.GET_SUCCESS)
                 .build();
 
@@ -52,7 +52,7 @@ public class AppointmentController {
                                                @RequestBody AppointmentUpdatingRequest appointmentUpdatingRequest)
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iAppointmentService.updateAppointment(id, appointmentUpdatingRequest))
+                .data(appointmentService.updateAppointment(id, appointmentUpdatingRequest))
                 .message(FeedbackMessage.UPDATE_SUCCESS)
                 .build();
 
@@ -62,7 +62,7 @@ public class AppointmentController {
     @DeleteMapping(UrlMapping.DELETE_APPOINTMENT)
     public ResponseEntity<ApiResponse> deleteAppointment(@PathVariable long id)
     {
-        iAppointmentService.deleteAppointment(id);
+        appointmentService.deleteAppointment(id);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.DELETE_SUCCESS)
                 .build();
@@ -74,7 +74,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> getAppointmentById(@PathVariable long id)
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iAppointmentService.getAppointmentById(id))
+                .data(appointmentService.getAppointmentById(id))
                 .message(FeedbackMessage.GET_SUCCESS)
                 .build();
 
@@ -85,7 +85,7 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse> getAppointmentByNo(@PathVariable String no)
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iAppointmentService.getAppointmentByNo(no))
+                .data(appointmentService.getAppointmentByNo(no))
                 .message(FeedbackMessage.GET_SUCCESS)
                 .build();
 

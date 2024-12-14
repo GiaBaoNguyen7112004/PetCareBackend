@@ -4,7 +4,7 @@ package com.personalproject.universal_pet_care.controller;
 import com.personalproject.universal_pet_care.payload.request.RegistrationRequest;
 import com.personalproject.universal_pet_care.payload.request.UserUpdatingRequest;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
-import com.personalproject.universal_pet_care.service.user.IUserService;
+import com.personalproject.universal_pet_care.service.user.UserService;
 
 import com.personalproject.universal_pet_care.utils.FeedbackMessage;
 import com.personalproject.universal_pet_care.utils.UrlMapping;
@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
-    IUserService iUserService;
+    UserService userService;
 
     @PostMapping(UrlMapping.REGISTER_USER)
     public ResponseEntity<ApiResponse> register(@RequestBody RegistrationRequest registrationRequest) {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iUserService.register(registrationRequest))
+                .data(userService.register(registrationRequest))
                 .message(FeedbackMessage.CREATE_SUCCESS)
                 .build();
 
@@ -36,7 +36,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> updateUser(@PathVariable Long id, @RequestBody UserUpdatingRequest userUpdatingRequest)
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iUserService.updateUser(id, userUpdatingRequest))
+                .data(userService.updateUser(id, userUpdatingRequest))
                 .message(FeedbackMessage.UPDATE_SUCCESS)
                 .build();
 
@@ -47,7 +47,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long id)
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iUserService.getUserById(id))
+                .data(userService.getUserById(id))
                 .message(FeedbackMessage.GET_SUCCESS)
                 .build();
 
@@ -57,7 +57,7 @@ public class UserController {
     @DeleteMapping(UrlMapping.DELETE_USER_BY_ID)
     public ResponseEntity<ApiResponse> deleteUserById(@PathVariable Long id)
     {
-        iUserService.deleteUser(id);
+        userService.deleteUser(id);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.DELETE_SUCCESS)
                 .build();
@@ -69,7 +69,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> getAllUsers()
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iUserService.getAllUsers())
+                .data(userService.getAllUsers())
                 .message(FeedbackMessage.GET_SUCCESS)
                 .build();
 
@@ -80,7 +80,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> getUserDetails(@PathVariable Long id)
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iUserService.getUserDetails(id))
+                .data(userService.getUserDetails(id))
                 .message(FeedbackMessage.GET_SUCCESS)
                 .build();
 

@@ -4,25 +4,21 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Entity(name = "reviews")
+import java.util.Collection;
+
+@Entity(name = "roles")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Review {
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    int stars;
-    String feedback;
+    String name;
 
-    @ManyToOne
-    @JoinColumn(name = "reviewer_id")
-    User reviewer;
-
-    @ManyToOne
-    @JoinColumn(name = "veterinarian_id")
-    User veterinarian;
+    @ManyToMany
+    Collection<User> users;
 }

@@ -3,7 +3,7 @@ package com.personalproject.universal_pet_care.controller;
 
 import com.personalproject.universal_pet_care.payload.request.PetUpdatingRequest;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
-import com.personalproject.universal_pet_care.service.pet.IPetService;
+import com.personalproject.universal_pet_care.service.pet.PetService;
 import com.personalproject.universal_pet_care.utils.FeedbackMessage;
 import com.personalproject.universal_pet_care.utils.UrlMapping;
 import lombok.AccessLevel;
@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PetController {
-    IPetService iPetService;
+    PetService petService;
 
     @GetMapping(UrlMapping.GET_ALL_PETS)
     public ResponseEntity<ApiResponse> getAllPets()
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iPetService.getAllPets())
+                .data(petService.getAllPets())
                 .message(FeedbackMessage.GET_SUCCESS)
                 .build();
 
@@ -35,7 +35,7 @@ public class PetController {
     public ResponseEntity<ApiResponse> getPetById(@PathVariable long id)
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iPetService.getPetById(id))
+                .data(petService.getPetById(id))
                 .message(FeedbackMessage.GET_SUCCESS)
                 .build();
 
@@ -46,7 +46,7 @@ public class PetController {
     public ResponseEntity<ApiResponse> updatePet(@PathVariable long id, @RequestBody PetUpdatingRequest petUpdatingRequest)
     {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iPetService.updatePet(id, petUpdatingRequest))
+                .data(petService.updatePet(id, petUpdatingRequest))
                 .message(FeedbackMessage.UPDATE_SUCCESS)
                 .build();
 
@@ -56,7 +56,7 @@ public class PetController {
     @DeleteMapping(UrlMapping.DELETE_PET)
     public ResponseEntity<ApiResponse> getAllPets(@PathVariable long id)
     {
-        iPetService.deletePet(id);
+        petService.deletePet(id);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.DELETE_SUCCESS)
                 .build();

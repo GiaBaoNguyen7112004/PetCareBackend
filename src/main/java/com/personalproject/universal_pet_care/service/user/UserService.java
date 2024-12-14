@@ -1,84 +1,17 @@
 package com.personalproject.universal_pet_care.service.user;
 
 import com.personalproject.universal_pet_care.dto.UserDTO;
-import com.personalproject.universal_pet_care.entity.User;
-import com.personalproject.universal_pet_care.entity.Veterinarian;
-import com.personalproject.universal_pet_care.exception.AppException;
-import com.personalproject.universal_pet_care.exception.ErrorCode;
-import com.personalproject.universal_pet_care.mapper.UserMapper;
 import com.personalproject.universal_pet_care.payload.request.RegistrationRequest;
-
-import com.personalproject.universal_pet_care.factory.UserFactory;
 import com.personalproject.universal_pet_care.payload.request.UserUpdatingRequest;
-import com.personalproject.universal_pet_care.repository.user.UserRepository;
-import com.personalproject.universal_pet_care.service.appointment.IAppointmentService;
-import com.personalproject.universal_pet_care.service.review.IReviewService;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-
-
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor
-public class UserService implements IUserService{
-    UserFactory userFactory;
-    UserMapper userMapper;
-    UserRepository userRepository;
-    IReviewService iReviewService;
-    IAppointmentService iAppointmentService;
+public interface UserService {
+    UserDTO register(RegistrationRequest registrationRequest);
+    UserDTO updateUser(Long id, UserUpdatingRequest userUpdatingRequest);
+    UserDTO getUserById(Long id);
+    void deleteUser(Long id);
 
-    @Override
-    public UserDTO register(RegistrationRequest registrationRequest) {
-        return userMapper.toUserDTO(userFactory.createUser(registrationRequest));
-    }
-
-    @Override
-    public UserDTO updateUser(Long id, UserUpdatingRequest userUpdatingRequest) {
-        User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND));
-        userMapper.updateUser(user, userUpdatingRequest);
-
-        return userMapper.toUserDTO(userRepository.save(user));
-    }
-
-    @Override
-    public UserDTO getUserById(Long id)
-    {
-        return userMapper.toUserDTO(userRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND)));
-    }
-
-    @Override
-    public void deleteUser(Long id)
-    {
-        userRepository.findById(id).ifPresentOrElse(userRepository::delete,
-                () -> {throw new AppException(ErrorCode.NO_DATA_FOUND);});
-    }
-
-    @Override
-    public List<UserDTO> getAllUsers()
-    {
-        return userRepository.findAll().stream().map(userMapper::toUserDTO).toList();
-    }
-
-    @Override
-    public UserDTO getUserDetails(Long userId)
-    {
-        return userRepository.findById(userId).map(user -> {
-            UserDTO userDTO = userMapper.toUserDTO(user);
-            if(user instanceof Veterinarian)
-            {
-                userDTO.setAverageStars(iReviewService.getAverageStarForVet(userId));
-            }
-
-            userDTO.setAppointmentDTOs(iAppointmentService.getAppointmentByUserId(userId));
-            userDTO.setReviewDTOs(iReviewService.getAllReviewsOfUser(userId));
-
-            return userDTO;
-        }).orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND));
-    }
+    List<UserDTO> getAllUsers();
+    UserDTO getUserDetails(Long userId);
 }

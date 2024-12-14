@@ -3,7 +3,7 @@ package com.personalproject.universal_pet_care.controller;
 import com.personalproject.universal_pet_care.payload.request.ReviewSubmissionRequest;
 import com.personalproject.universal_pet_care.payload.request.ReviewUpdatingRequest;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
-import com.personalproject.universal_pet_care.service.review.IReviewService;
+import com.personalproject.universal_pet_care.service.review.ReviewService;
 import com.personalproject.universal_pet_care.utils.FeedbackMessage;
 import com.personalproject.universal_pet_care.utils.UrlMapping;
 import lombok.AccessLevel;
@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ReviewController {
-    IReviewService iReviewService;
+    ReviewService reviewService;
 
     @PostMapping(UrlMapping.SUBMIT_REVIEW)
     public ResponseEntity<ApiResponse> submitReview(@RequestBody ReviewSubmissionRequest reviewSubmissionRequest,
                                                     @PathVariable long reviewerId, @PathVariable long veterinarianId) {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iReviewService.submitReview(reviewSubmissionRequest, reviewerId, veterinarianId))
+                .data(reviewService.submitReview(reviewSubmissionRequest, reviewerId, veterinarianId))
                 .message(FeedbackMessage.CREATE_SUCCESS)
                 .build();
 
@@ -35,7 +35,7 @@ public class ReviewController {
     public ResponseEntity<ApiResponse> updateReview(@PathVariable long id,
                                                     @RequestBody ReviewUpdatingRequest reviewUpdatingRequest) {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iReviewService.updateReview(id, reviewUpdatingRequest))
+                .data(reviewService.updateReview(id, reviewUpdatingRequest))
                 .message(FeedbackMessage.UPDATE_SUCCESS)
                 .build();
 
@@ -44,7 +44,7 @@ public class ReviewController {
 
     @DeleteMapping(UrlMapping.DELETE_REVIEW)
     public ResponseEntity<ApiResponse> deleteReview(@PathVariable long id) {
-        iReviewService.deleteReview(id);
+        reviewService.deleteReview(id);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.DELETE_SUCCESS)
                 .build();
@@ -55,7 +55,7 @@ public class ReviewController {
     @GetMapping(UrlMapping.GET_AVERAGE_STARS_FOR_VET)
     public ResponseEntity<ApiResponse> getAvgStarsForVet(@PathVariable long veterinarianId) {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iReviewService.getAverageStarForVet(veterinarianId))
+                .data(reviewService.getAverageStarForVet(veterinarianId))
                 .message(FeedbackMessage.GET_SUCCESS)
                 .build();
 
@@ -66,7 +66,7 @@ public class ReviewController {
     public ResponseEntity<ApiResponse> getReviewsByUserId(@PathVariable long id, @RequestParam int pageNumber,
                                                           @RequestParam int pageSize) {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iReviewService.getReviewsByUserId(id, pageNumber, pageSize))
+                .data(reviewService.getReviewsByUserId(id, pageNumber, pageSize))
                 .message(FeedbackMessage.GET_SUCCESS)
                 .build();
 

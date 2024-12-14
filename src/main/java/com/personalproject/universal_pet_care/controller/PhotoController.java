@@ -1,7 +1,7 @@
 package com.personalproject.universal_pet_care.controller;
 
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
-import com.personalproject.universal_pet_care.service.photo.IPhotoService;
+import com.personalproject.universal_pet_care.service.photo.PhotoService;
 import com.personalproject.universal_pet_care.utils.FeedbackMessage;
 import com.personalproject.universal_pet_care.utils.UrlMapping;
 import lombok.AccessLevel;
@@ -18,13 +18,13 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PhotoController {
-    IPhotoService iPhotoService;
+    PhotoService photoService;
 
     @PostMapping(UrlMapping.UPLOAD_PHOTO)
     public ResponseEntity<ApiResponse> uploadPhoto(@RequestParam MultipartFile file,
                                                    @RequestParam long userId) throws IOException {
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iPhotoService.savePhoto(file, userId))
+                .data(photoService.savePhoto(file, userId))
                 .message(FeedbackMessage.CREATE_SUCCESS)
                 .build();
 
@@ -34,7 +34,7 @@ public class PhotoController {
     @GetMapping(UrlMapping.GET_PHOTO_BY_ID)
     public ResponseEntity<ApiResponse> getPhotoById(@PathVariable long id){
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(iPhotoService.getPhotoById(id))
+                .data(photoService.getPhotoById(id))
                 .message(FeedbackMessage.GET_SUCCESS)
                 .build();
 
@@ -46,7 +46,7 @@ public class PhotoController {
                                                    @PathVariable long id) throws IOException {
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.UPDATE_SUCCESS)
-                .data(iPhotoService.updatePhoto(file, id))
+                .data(photoService.updatePhoto(file, id))
                 .build();
 
         return ResponseEntity.ok().body(apiResponse);
@@ -54,7 +54,7 @@ public class PhotoController {
 
     @DeleteMapping(UrlMapping.DELETE_PHOTO)
     public ResponseEntity<ApiResponse> deletePhoto(@PathVariable long photoId, @PathVariable long userId){
-        iPhotoService.deletePhoto(photoId, userId);
+        photoService.deletePhoto(photoId, userId);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.DELETE_SUCCESS)
                 .build();
