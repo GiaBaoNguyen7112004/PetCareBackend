@@ -14,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class JwtUtils {
 
     private Key getKey()
     {
-        return Keys.hmacShaKeyFor(secretKey.getBytes());
+        return Keys.hmacShaKeyFor(Base64.getDecoder().decode(secretKey));
     }
 
 //    Dung parserBuilder() de tao ra 1 doi tuong JwtParser dung de phan tich va giai ma token
