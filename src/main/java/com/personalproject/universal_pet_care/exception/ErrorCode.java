@@ -17,7 +17,9 @@ public enum ErrorCode {
     REVIEW_YOURSELF(1003, "Veterinarian can not review himself", HttpStatus.BAD_REQUEST),
     ALREADY_REVIEWED(1004,"You already reviewed this veterinarian", HttpStatus.CONFLICT),
     REVIEW_NOT_COMPLETED(1005, "Only reviewer who has complete appointment can review",
-            HttpStatus.NOT_ACCEPTABLE);
+            HttpStatus.NOT_ACCEPTABLE),
+    UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
+    ;
 
 
     int code;

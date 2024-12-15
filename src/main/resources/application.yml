@@ -16,3 +16,7 @@ server:
   port: 8888
   servlet:
     context-path: /pet-care
+
+jwt:
+  secretKey: ceHgbdUuHKBjAbb+2EGCHqyQU5ktx3Nk2aJHddeLBFdQKXNfdZuMtyJDNCQNKPuH
+  expirationTimeInMs : 3600000
