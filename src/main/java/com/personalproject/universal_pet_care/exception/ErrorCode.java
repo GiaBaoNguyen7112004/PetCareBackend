@@ -19,6 +19,7 @@ public enum ErrorCode {
     REVIEW_NOT_COMPLETED(1005, "Only reviewer who has complete appointment can review",
             HttpStatus.NOT_ACCEPTABLE),
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
+    UNCATEGORIED(1007, "Uncategorized", HttpStatus.BAD_REQUEST),
     ;
 
 
