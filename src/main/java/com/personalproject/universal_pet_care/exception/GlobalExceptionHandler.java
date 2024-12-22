@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ErrorCode.UNCATEGORIED;
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .data(errorCode.getMessage())
+                .data(e.getMessage())
                 .code(errorCode.getCode())
                 .build();
 
