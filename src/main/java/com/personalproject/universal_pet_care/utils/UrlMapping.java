@@ -46,6 +46,9 @@ public class UrlMapping {
     public static final String GET_AVERAGE_STARS_FOR_VET = "/vet/avg-star/{veterinarianId}";
     public static final String GET_REVIEWS_BY_ID = "/user/{id}";
 
+//    Authentication
+    public static final String AUTHENTICATION = API + "/authentication";
+    public static final String LOGIN = "/log-in";
 //    constructor
     private UrlMapping() {}
 }

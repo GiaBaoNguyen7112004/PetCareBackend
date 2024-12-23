@@ -20,6 +20,7 @@ public enum ErrorCode {
             HttpStatus.NOT_ACCEPTABLE),
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNCATEGORIED(1007, "Uncategorized", HttpStatus.BAD_REQUEST),
+    INVALID_DATA(1008, "Invalid data", HttpStatus.BAD_REQUEST),
     ;
 
 
