@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,10 +20,12 @@ public class SimpleUserFactory implements UserFactory{
     VeterinarianFactory veterinarianFactory;
     PatientFactory patientFactory;
     UserRepository userRepository;
+    PasswordEncoder passwordEncoder;
 
     @Override
     public User createUser(RegistrationRequest registrationRequest) {
         if(userRepository.existsByEmail(registrationRequest.getEmail())) throw new AppException(ErrorCode.USER_EXIST);
+        registrationRequest.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
 
         try {
             switch (registrationRequest.getUserType()) {

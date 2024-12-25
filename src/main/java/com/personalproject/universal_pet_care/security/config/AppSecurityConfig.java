@@ -2,6 +2,7 @@ package com.personalproject.universal_pet_care.security.config;
 
 import com.personalproject.universal_pet_care.security.jwt.AuthTokenFilter;
 import com.personalproject.universal_pet_care.security.jwt.JwtAuthenticationEntryPoint;
+import com.personalproject.universal_pet_care.utils.UrlMapping;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -27,7 +28,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class AppSecurityConfig {
     AuthTokenFilter authTokenFilter;
     UserDetailsService userDetailsService;
-    public final String[] PUBLIC_ENDPOINT = {"/auth/**"};
+    public final String[] PUBLIC_ENDPOINT = {UrlMapping.AUTHENTICATION + "/**"};
 
     @Bean
     public AuthenticationManager authenticationManager(

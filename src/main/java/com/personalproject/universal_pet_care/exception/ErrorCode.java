@@ -21,6 +21,7 @@ public enum ErrorCode {
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNCATEGORIED(1007, "Uncategorized", HttpStatus.BAD_REQUEST),
     INVALID_DATA(1008, "Invalid data", HttpStatus.BAD_REQUEST),
+    ACCOUNT_DISABLED(1009, "Account disabled", HttpStatus.UNAUTHORIZED),
     ;
 
 
