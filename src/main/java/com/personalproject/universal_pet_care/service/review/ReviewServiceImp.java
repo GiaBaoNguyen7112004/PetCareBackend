@@ -77,8 +77,7 @@ public class ReviewServiceImp implements ReviewService {
     @Override
     public void deleteReview(long id)
     {
-        reviewRepository.findById(id).ifPresentOrElse(reviewRepository::delete,
-                () -> {throw new AppException(ErrorCode.NO_DATA_FOUND);});
+        reviewRepository.deleteById(id);
     }
 
     @Override

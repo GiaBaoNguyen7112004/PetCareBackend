@@ -1,5 +1,7 @@
 package com.personalproject.universal_pet_care.utils;
 
+import com.personalproject.universal_pet_care.exception.AppException;
+import com.personalproject.universal_pet_care.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter
@@ -50,5 +52,7 @@ public class UrlMapping {
     public static final String AUTHENTICATION = API + "/authentication";
     public static final String LOGIN = "/log-in";
 //    constructor
-    private UrlMapping() {}
+    private UrlMapping() {
+        throw new AppException(ErrorCode.INITIATE_UTILITIES);
+    }
 }

@@ -47,8 +47,7 @@ public class PetServiceImp implements PetService {
     @Override
     public void deletePet(long id)
     {
-       petRepository.findById(id).ifPresentOrElse(petRepository::delete,
-               () -> {throw new AppException(ErrorCode.NO_DATA_FOUND);});
+       petRepository.deleteById(id);
     }
 
     @Override

@@ -56,9 +56,7 @@ public class PhotoServiceImp implements PhotoService {
         user.setPhoto(null);
         userRepository.save(user);
 
-        photoRepository.findById(photoId).ifPresentOrElse(photoRepository::delete, () -> {
-            throw new AppException(ErrorCode.NO_DATA_FOUND);
-        });
+        photoRepository.deleteById(photoId);
     }
 
     @Override

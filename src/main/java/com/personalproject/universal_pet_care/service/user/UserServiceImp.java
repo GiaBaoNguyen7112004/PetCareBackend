@@ -55,8 +55,7 @@ public class UserServiceImp implements UserService {
     @Override
     public void deleteUser(Long id)
     {
-        userRepository.findById(id).ifPresentOrElse(userRepository::delete,
-                () -> {throw new AppException(ErrorCode.NO_DATA_FOUND);});
+        userRepository.deleteById(id);
     }
 
     @Override

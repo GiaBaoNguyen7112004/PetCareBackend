@@ -1,5 +1,7 @@
 package com.personalproject.universal_pet_care.utils;
 
+import com.personalproject.universal_pet_care.exception.AppException;
+import com.personalproject.universal_pet_care.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter
@@ -10,5 +12,7 @@ public class FeedbackMessage {
     public static final String GET_SUCCESS = "Get successfully";
     public static final String AUTHENTICATE_SUCCESS = "Authenticated successfully";
 
-    private FeedbackMessage() {}
+    private FeedbackMessage() {
+        throw new AppException(ErrorCode.INITIATE_UTILITIES);
+    }
 }

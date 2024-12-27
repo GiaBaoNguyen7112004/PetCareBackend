@@ -74,8 +74,7 @@ public class AppointmentServiceImp implements AppointmentService {
 
     @Override
     public void deleteAppointment(long id) {
-        appointmentRepository.findById(id).ifPresentOrElse(appointmentRepository::delete,
-                () -> {throw new AppException(ErrorCode.NO_DATA_FOUND);});
+        appointmentRepository.deleteById(id);
     }
 
     @Override

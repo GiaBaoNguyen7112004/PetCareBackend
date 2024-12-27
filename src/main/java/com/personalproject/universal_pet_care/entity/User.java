@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "users")
@@ -39,6 +40,9 @@ public class User {
             joinColumns = @JoinColumn(name="user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName = "id"))
     Collection<Role> roles;
+
+    @OneToMany(mappedBy = "user")
+    List<VerificationToken> verificationTokens;
 
     public Collection<Role> getRoles() {
         if(Objects.isNull(roles)) roles = new HashSet<>();
