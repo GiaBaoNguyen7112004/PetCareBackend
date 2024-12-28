@@ -12,6 +12,18 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
     show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: giabao7112004@gmail.com
+    password: gisb quje jpua taef
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    default-encoding: UTF-8
 server:
   port: 8888
   servlet:
@@ -20,3 +32,4 @@ server:
 jwt:
   secretKey: Ckj2tdZqqx4zYqn0iSB9bUPIsckWdFoa/YIi1kzGWKc9qM5XCbRoPHmWhft9pZZCGeKYcAhgILzOu++4toDC0Gn9iDWTlRAlnQ8efRnVU8I=
   expirationTimeInMs : 3600000
+
