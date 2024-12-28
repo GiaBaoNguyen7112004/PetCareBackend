@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> handlingException(Exception e) {
-        ErrorCode errorCode = ErrorCode.UNCATEGORIED;
+        ErrorCode errorCode = ErrorCode.UNCATEGORIZED;
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .data(e.getMessage())

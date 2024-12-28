@@ -19,11 +19,14 @@ public enum ErrorCode {
     REVIEW_NOT_COMPLETED(1005, "Only reviewer who has complete appointment can review",
             HttpStatus.NOT_ACCEPTABLE),
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
-    UNCATEGORIED(1007, "Uncategorized", HttpStatus.BAD_REQUEST),
+    UNCATEGORIZED(1007, "Uncategorized", HttpStatus.BAD_REQUEST),
     INVALID_DATA(1008, "Invalid data", HttpStatus.BAD_REQUEST),
     ACCOUNT_DISABLED(1009, "Account disabled", HttpStatus.UNAUTHORIZED),
     INVALID_VERIFICATION_TOKEN(1010, "Invalid verification token", HttpStatus.UNAUTHORIZED),
     INITIATE_UTILITIES(1011, "Initiate utilities", HttpStatus.UNAUTHORIZED),
+    ALREADY_VERIFIED_ACCOUNT(1012, "Account has already been verified", HttpStatus.CONFLICT),
+    EXPIRED_TOKEN(1013, "Token is expired", HttpStatus.UNAUTHORIZED),
+    VALIDATE_TOKEN(1014, "Token validation failed", HttpStatus.UNAUTHORIZED),
     ;
 
 

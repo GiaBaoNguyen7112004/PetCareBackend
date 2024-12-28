@@ -51,6 +51,15 @@ public class UrlMapping {
 //    Authentication
     public static final String AUTHENTICATION = API + "/authentication";
     public static final String LOGIN = "/log-in";
+
+//    Verification Token
+    public static final String TOKEN_VERIFICATION = API + "/verification";
+    public static final String VALIDATE_TOKEN = "/validate-token";
+    public static final String SAVE_TOKEN_FOR_USER = "/user/save-token";
+    public static final String DELETE_TOKEN = "/token/{tokenId}";
+    public static final String GENERATE_NEW_TOKEN = "/generate-new-token";
+    public static final String CHECK_TOKEN_EXPIRATION = "/check-token-expiration";
+
 //    constructor
     private UrlMapping() {
         throw new AppException(ErrorCode.INITIATE_UTILITIES);

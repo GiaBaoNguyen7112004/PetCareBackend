@@ -2,9 +2,9 @@ package com.personalproject.universal_pet_care.service.token;
 
 import com.personalproject.universal_pet_care.entity.User;
 import com.personalproject.universal_pet_care.entity.VerificationToken;
-import com.personalproject.universal_pet_care.enums.TokenStatus;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
+import com.personalproject.universal_pet_care.payload.request.VerificationTokenCreationRequest;
 import com.personalproject.universal_pet_care.repository.VerificationTokenRepository;
 import com.personalproject.universal_pet_care.repository.user.UserRepository;
 import lombok.AccessLevel;
@@ -24,24 +24,26 @@ public class VerificationTokenServiceImp implements VerificationTokenService {
     UserRepository userRepository;
 
     @Override
-    public String validateToken(String token) {
+    public void checkValidToken(String token) {
         Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
         if (verificationToken.isEmpty()) {
-            return TokenStatus.EXPIRED.toString();
+            throw new AppException(ErrorCode.INVALID_VERIFICATION_TOKEN);
         }
 
         User user = verificationToken.get().getUser();
-        if(user.isEnabled()) return TokenStatus.ALREADY_VERIFIED.toString();
-        if(isExpired(token)) return TokenStatus.EXPIRED.toString();
+        if(user.isEnabled()) throw new AppException(ErrorCode.ALREADY_VERIFIED_ACCOUNT);
+        if(isExpired(token)) throw new AppException(ErrorCode.EXPIRED_TOKEN);
 
         user.setEnabled(true);
         userRepository.save(user);
-        return TokenStatus.VALID.toString();
     }
 
     @Override
-    public void saveVerificationTokenForUser(String token, User user) {
-        VerificationToken verificationToken = new VerificationToken(user, token);
+    public void saveVerificationTokenForUser(VerificationTokenCreationRequest verificationTokenCreationRequest) {
+        User user = userRepository.findById(verificationTokenCreationRequest.getUserId())
+                .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND));
+
+        VerificationToken verificationToken = new VerificationToken(user, verificationTokenCreationRequest.getToken());
         verificationTokenRepository.save(verificationToken);
     }
 

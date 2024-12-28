@@ -8,10 +8,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserUpdatingRequest {
-    String firstName;
-    String lastName;
-    String gender;
-    String phoneNumber;
-    String specialization;
+public class VerificationTokenCreationRequest {
+    String token;
+    Long userId;
 }
