@@ -27,6 +27,7 @@ public enum ErrorCode {
     ALREADY_VERIFIED_ACCOUNT(1012, "Account has already been verified", HttpStatus.CONFLICT),
     EXPIRED_TOKEN(1013, "Token is expired", HttpStatus.UNAUTHORIZED),
     VALIDATE_TOKEN(1014, "Token validation failed", HttpStatus.UNAUTHORIZED),
+    SENDING_EMAIL(1015, "Sending email failed", HttpStatus.BAD_REQUEST),
     ;
 
 
