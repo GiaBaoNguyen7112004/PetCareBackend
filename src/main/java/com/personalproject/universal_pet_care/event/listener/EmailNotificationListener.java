@@ -2,6 +2,8 @@ package com.personalproject.universal_pet_care.event.listener;
 
 import com.personalproject.universal_pet_care.entity.User;
 import com.personalproject.universal_pet_care.event.UserRegistrationEvent;
+import com.personalproject.universal_pet_care.exception.AppException;
+import com.personalproject.universal_pet_care.exception.ErrorCode;
 import com.personalproject.universal_pet_care.payload.request.VerificationTokenCreationRequest;
 import com.personalproject.universal_pet_care.service.email.EmailService;
 import com.personalproject.universal_pet_care.service.token.VerificationTokenService;
@@ -31,6 +33,7 @@ public class EmailNotificationListener{
     public void handleEvent(ApplicationEvent event) throws MessagingException, UnsupportedEncodingException {
         switch (event.getClass().getSimpleName()){
             case "UserRegistrationEvent": handleUserRegistrationEvent((UserRegistrationEvent) event); break;
+            default: throw new AppException(ErrorCode.INVALID_DATA);
         }
     }
 
@@ -51,14 +54,14 @@ public class EmailNotificationListener{
 
     private void sendUserRegistrationVerificationEmail(User user, String url)
             throws MessagingException, UnsupportedEncodingException {
-        String subject = "Verify Your Email";
-        String senderName = "Universal Pet Care";
-        String mailContent = "<p> Hi, " + user.getFirstName() + ", </p>" +
-                "<p>Thank you for registering with us," +
-                "Please, follow the link below to complete your registration.</p>" +
-                "<a href=\"" + url + "\">Verify your email</a>" +
-                "<p> Thank you <br> Universal Pet Care Email Verification Service";
-
+        String subject = "Email Verification - Universal Pet Care";
+        String senderName = "Universal Pet Care Team";
+        String mailContent = "<p>Dear " + user.getFirstName() + ",</p>" +
+                "<p>Thank you for registering with <strong>Universal Pet Care</strong>. " +
+                "To complete your registration, please verify your email address by clicking the link below:</p>" +
+                "<p><a href=\"" + url + "\" style=\"color: #007bff; text-decoration: none;\">Verify Your Email</a></p>" +
+                "<p>If you did not sign up for Universal Pet Care, please disregard this message.</p>" +
+                "<p>Thank you,<br>The Universal Pet Care Team</p>";
         emailService.sendEmail(user.getEmail(), subject, senderName, mailContent);
     }
 //    end user registration verification email

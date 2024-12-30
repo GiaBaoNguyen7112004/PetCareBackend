@@ -1,8 +1,10 @@
 package com.personalproject.universal_pet_care.config;
 
 import com.personalproject.universal_pet_care.entity.Role;
-import com.personalproject.universal_pet_care.entity.User;
 import com.personalproject.universal_pet_care.enums.UserType;
+import com.personalproject.universal_pet_care.factory.UserFactory;
+import com.personalproject.universal_pet_care.payload.request.RegistrationRequest;
+import com.personalproject.universal_pet_care.repository.RoleRepository;
 import com.personalproject.universal_pet_care.repository.user.UserRepository;
 import com.personalproject.universal_pet_care.utils.FeedbackMessage;
 import lombok.AccessLevel;
@@ -14,7 +16,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.Collections;
 
@@ -24,7 +26,8 @@ import java.util.Collections;
 @Slf4j
 public class AppInitConfig {
     final UserRepository userRepository;
-    final PasswordEncoder passwordEncoder;
+    final UserFactory userFactory;
+    final RoleRepository roleRepository;
 
     @Value("${admin.email}")
     String adminEmail;
@@ -45,17 +48,20 @@ public class AppInitConfig {
         return args -> {
             if (!userRepository.existsByEmail(adminEmail)) {
                 Role role = Role.builder()
-                        .name("ROLE_" + UserType.ADMIN).build();
+                        .name("ROLE_" + UserType.ADMIN)
+                        .build();
+                roleRepository.save(role);
 
-                User user = User.builder()
+                RegistrationRequest registrationRequest = RegistrationRequest.builder()
                         .email(adminEmail)
-                        .password(passwordEncoder.encode(adminPassword))
                         .firstName(adminFirstName)
-                        .roles(Collections.singletonList(role))
+                        .password(adminPassword)
+                        .userType(UserType.ADMIN.toString())
+                        .isEnabled(true)
                         .build();
 
+                userFactory.createUser(registrationRequest);
                 log.warn(FeedbackMessage.INITIATE_ADMIN);
-                userRepository.save(user);
             }
         };
     }
