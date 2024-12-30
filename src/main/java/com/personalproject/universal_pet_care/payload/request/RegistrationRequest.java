@@ -1,6 +1,5 @@
 package com.personalproject.universal_pet_care.payload.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
