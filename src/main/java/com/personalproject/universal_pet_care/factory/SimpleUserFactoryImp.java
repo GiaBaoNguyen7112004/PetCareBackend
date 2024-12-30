@@ -1,5 +1,6 @@
 package com.personalproject.universal_pet_care.factory;
 
+import com.personalproject.universal_pet_care.enums.UserType;
 import com.personalproject.universal_pet_care.event.UserRegistrationEvent;
 import com.personalproject.universal_pet_care.payload.request.RegistrationRequest;
 import com.personalproject.universal_pet_care.entity.User;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class SimpleUserFactory implements UserFactory{
+public class SimpleUserFactoryImp implements UserFactory{
     AdminFactory adminFactory;
     VeterinarianFactory veterinarianFactory;
     PatientFactory patientFactory;
@@ -32,15 +33,18 @@ public class SimpleUserFactory implements UserFactory{
         registrationRequest.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
 
         try {
-            User user = switch (registrationRequest.getUserType()) {
-                case "ADMIN" -> adminFactory.createAdmin(registrationRequest);
-                case "VETERINARIAN" -> veterinarianFactory.createVeterinarian(registrationRequest);
-                case "PATIENT" -> patientFactory.createPatient(registrationRequest);
-                default -> throw new AppException(ErrorCode.INVALID_DATA);
+            UserType userType = UserType.valueOf(registrationRequest.getUserType());
+
+            User user = switch (userType) {
+                case ADMIN -> adminFactory.createAdmin(registrationRequest);
+                case VETERINARIAN -> veterinarianFactory.createVeterinarian(registrationRequest);
+                case PATIENT -> patientFactory.createPatient(registrationRequest);
             };
 
             applicationEventPublisher.publishEvent(new UserRegistrationEvent(user));
             return user;
-        } catch (DataIntegrityViolationException e) {throw new AppException(ErrorCode.USER_EXIST);}
+        }
+        catch (DataIntegrityViolationException e) {throw new AppException(ErrorCode.USER_EXIST);}
+        catch(IllegalArgumentException e){throw new AppException(ErrorCode.INVALID_DATA);}
     }
 }

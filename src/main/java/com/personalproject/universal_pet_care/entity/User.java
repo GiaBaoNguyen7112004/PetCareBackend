@@ -12,6 +12,7 @@ import java.util.Objects;
 @Entity(name = "users")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -35,7 +36,7 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     Photo photo;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name ="user_role",
             joinColumns = @JoinColumn(name="user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName = "id"))
