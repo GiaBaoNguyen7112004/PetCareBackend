@@ -1,6 +1,6 @@
 package com.personalproject.universal_pet_care.event;
 
-import com.personalproject.universal_pet_care.entity.User;
+import com.personalproject.universal_pet_care.entity.Appointment;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,11 +11,11 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class UserRegistrationEvent extends ApplicationEvent {
-    User user;
+public class AppointmentDeclinedEvent extends ApplicationEvent {
+    Appointment appointment;
 
-    public UserRegistrationEvent(User user) {
-        super(user);
-        this.user = user;
+    public AppointmentDeclinedEvent(Appointment appointment) {
+        super(appointment);
+        this.appointment = appointment;
     }
 }

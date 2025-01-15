@@ -4,6 +4,9 @@ import com.personalproject.universal_pet_care.dto.AppointmentDTO;
 import com.personalproject.universal_pet_care.entity.Appointment;
 import com.personalproject.universal_pet_care.entity.Pet;
 import com.personalproject.universal_pet_care.enums.AppointmentStatus;
+import com.personalproject.universal_pet_care.event.AppointmentApprovedEvent;
+import com.personalproject.universal_pet_care.event.AppointmentBookedEvent;
+import com.personalproject.universal_pet_care.event.AppointmentDeclinedEvent;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
 import com.personalproject.universal_pet_care.mapper.AppointmentMapper;
@@ -17,6 +20,7 @@ import com.personalproject.universal_pet_care.service.pet.PetService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,10 +35,11 @@ public class AppointmentServiceImp implements AppointmentService {
     AppointmentRepository appointmentRepository;
     PetMapper petMapper;
     PetService petService;
+    ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
     @Override
-    public AppointmentDTO createAppointment(AppointmentBookingRequest appointmentBookingRequest, long senderId, long recipientId) {
+    public AppointmentDTO bookAppointment(AppointmentBookingRequest appointmentBookingRequest, long senderId, long recipientId) {
         Appointment appointment = appointmentMapper.toAppointment(appointmentBookingRequest);
 
         appointment.addSender(userRepository.findById(senderId)
@@ -50,6 +55,7 @@ public class AppointmentServiceImp implements AppointmentService {
         petService.savePetForAppointment(pets);
         appointment.setPets(pets);
 
+        applicationEventPublisher.publishEvent(new AppointmentBookedEvent(appointment));
         return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
     }
 
@@ -64,7 +70,7 @@ public class AppointmentServiceImp implements AppointmentService {
                 .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND));
 
         if (!appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL)) {
-            throw new AppException(ErrorCode.CANNOT_UPDATE);
+            throw new AppException(ErrorCode.UPDATE_FAILED);
         }
 
         appointmentMapper.updateAppointment(appointment, appointmentUpdatingRequest);
@@ -93,5 +99,40 @@ public class AppointmentServiceImp implements AppointmentService {
     public List<AppointmentDTO> getAppointmentByUserId(Long id)
     {
         return appointmentRepository.findByUserId(id).stream().map(appointmentMapper::toAppointmentDTO).toList();
+    }
+
+    @Override
+    public AppointmentDTO cancelAppointment(Long id) {
+        return appointmentRepository.findById(id).filter(
+                appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+                .map(appointment -> {
+                    appointment.setStatus(AppointmentStatus.CANCELLED);
+                    return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
+                })
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
+    }
+
+    @Override
+    public AppointmentDTO approveAppointment(Long id) {
+        return appointmentRepository.findById(id).filter(
+                appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+                .map(appointment -> {
+                    appointment.setStatus(AppointmentStatus.APPROVED);
+                    applicationEventPublisher.publishEvent(new AppointmentApprovedEvent(appointment));
+                    return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
+                })
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
+    }
+
+    @Override
+    public AppointmentDTO declineAppointment(Long id) {
+        return appointmentRepository.findById(id).filter(
+                appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+                .map(appointment -> {
+                    appointment.setStatus(AppointmentStatus.NOT_APPROVED);
+                    applicationEventPublisher.publishEvent(new AppointmentDeclinedEvent(appointment));
+                    return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
+                })
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
     }
 }

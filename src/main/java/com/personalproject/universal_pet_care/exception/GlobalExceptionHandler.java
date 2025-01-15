@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MessagingException.class)
     public ResponseEntity<ApiResponse> handlingMessagingException(MessagingException e) {
-        ErrorCode errorCode = ErrorCode.SENDING_EMAIL;
+        ErrorCode errorCode = ErrorCode.SENDING_EMAIL_FAILED;
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(errorCode.getMessage())
@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UnsupportedEncodingException.class)
     public ResponseEntity<ApiResponse> handlingUnsupportedEncodingException(UnsupportedEncodingException e) {
-        ErrorCode errorCode = ErrorCode.SENDING_EMAIL;
+        ErrorCode errorCode = ErrorCode.SENDING_EMAIL_FAILED;
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(errorCode.getMessage())

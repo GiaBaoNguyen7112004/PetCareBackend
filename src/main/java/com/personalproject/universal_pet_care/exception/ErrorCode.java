@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatusCode;
 public enum ErrorCode {
     USER_EXIST(1000, "User existed", HttpStatus.BAD_REQUEST),
     NO_DATA_FOUND(1001, "No data was found", HttpStatus.NOT_FOUND),
-    CANNOT_UPDATE(1002, "Resource can not be updated", HttpStatus.BAD_REQUEST),
+    UPDATE_FAILED(1002, "Resource can not be updated", HttpStatus.BAD_REQUEST),
     REVIEW_YOURSELF(1003, "Veterinarian can not review himself", HttpStatus.BAD_REQUEST),
     ALREADY_REVIEWED(1004,"You already reviewed this veterinarian", HttpStatus.CONFLICT),
     REVIEW_NOT_COMPLETED(1005, "Only reviewer who has complete appointment can review",
@@ -27,7 +27,8 @@ public enum ErrorCode {
     ALREADY_VERIFIED_ACCOUNT(1012, "Account has already been verified", HttpStatus.CONFLICT),
     EXPIRED_TOKEN(1013, "Token is expired", HttpStatus.UNAUTHORIZED),
     VALIDATE_TOKEN(1014, "Token validation failed", HttpStatus.UNAUTHORIZED),
-    SENDING_EMAIL(1015, "Sending email failed", HttpStatus.BAD_REQUEST),
+    SENDING_EMAIL_FAILED(1015, "Sending email failed", HttpStatus.BAD_REQUEST),
+    APPOINTMENT_NOT_FOUND(1016, "Appointment not found", HttpStatus.NOT_FOUND),
     ;
 
 

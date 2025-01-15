@@ -18,7 +18,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -47,10 +48,14 @@ public class AppInitConfig {
         log.info("Initializing application");
         return args -> {
             if (!userRepository.existsByEmail(adminEmail)) {
-                Role role = Role.builder()
-                        .name("ROLE_" + UserType.ADMIN)
-                        .build();
-                roleRepository.save(role);
+                List<Role> roles = new ArrayList<>();
+                for (UserType userType : UserType.values()) {
+                    Role role = Role.builder()
+                            .name("ROLE_" + userType.name())
+                            .build();
+                    roles.add(role);
+                }
+                roleRepository.saveAll(roles);
 
                 RegistrationRequest registrationRequest = RegistrationRequest.builder()
                         .email(adminEmail)
