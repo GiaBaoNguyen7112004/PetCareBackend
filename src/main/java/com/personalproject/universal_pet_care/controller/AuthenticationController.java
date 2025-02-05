@@ -5,6 +5,7 @@ import com.personalproject.universal_pet_care.payload.request.AuthenticationRequ
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
 import com.personalproject.universal_pet_care.security.jwt.JwtUtils;
 import com.personalproject.universal_pet_care.security.user.AppUserDetails;
+import com.personalproject.universal_pet_care.service.token.VerificationTokenService;
 import com.personalproject.universal_pet_care.utils.FeedbackMessage;
 import com.personalproject.universal_pet_care.utils.UrlMapping;
 import jakarta.validation.Valid;
@@ -17,10 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(UrlMapping.AUTHENTICATION)
@@ -29,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
     AuthenticationManager authenticationManager;
     JwtUtils jwtUtils;
+    VerificationTokenService verificationTokenService;
 
     @PostMapping(UrlMapping.LOGIN)
     public ResponseEntity<ApiResponse> authenticate(
@@ -48,6 +47,16 @@ public class AuthenticationController {
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.AUTHENTICATE_SUCCESS)
                 .data(authenticationDTO)
+                .build();
+
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @PostMapping(UrlMapping.VERIFY_EMAIL)
+    public ResponseEntity<ApiResponse> verifyEmail(@RequestParam String token) {
+        verificationTokenService.validateToken(token);
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message(FeedbackMessage.VALID_TOKEN)
                 .build();
 
         return ResponseEntity.ok().body(apiResponse);

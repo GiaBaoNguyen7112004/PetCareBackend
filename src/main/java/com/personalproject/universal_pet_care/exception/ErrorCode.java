@@ -15,7 +15,7 @@ public enum ErrorCode {
     NO_DATA_FOUND(1001, "No data was found", HttpStatus.NOT_FOUND),
     UPDATE_FAILED(1002, "Resource can not be updated", HttpStatus.BAD_REQUEST),
     REVIEW_YOURSELF(1003, "Veterinarian can not review himself", HttpStatus.BAD_REQUEST),
-    ALREADY_REVIEWED(1004,"You already reviewed this veterinarian", HttpStatus.CONFLICT),
+    ALREADY_REVIEWED(1004, "You already reviewed this veterinarian", HttpStatus.CONFLICT),
     REVIEW_NOT_COMPLETED(1005, "Only reviewer who has complete appointment can review",
             HttpStatus.NOT_ACCEPTABLE),
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
@@ -29,6 +29,7 @@ public enum ErrorCode {
     VALIDATE_TOKEN(1014, "Token validation failed", HttpStatus.UNAUTHORIZED),
     SENDING_EMAIL_FAILED(1015, "Sending email failed", HttpStatus.BAD_REQUEST),
     APPOINTMENT_NOT_FOUND(1016, "Appointment not found", HttpStatus.NOT_FOUND),
+    ROLE_NOT_FOUND(1017, "Role not found", HttpStatus.NOT_FOUND),
     ;
 
 

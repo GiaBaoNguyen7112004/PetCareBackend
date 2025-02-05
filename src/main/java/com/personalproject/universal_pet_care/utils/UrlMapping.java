@@ -8,7 +8,7 @@ import lombok.Getter;
 public class UrlMapping {
     public static final String API = "/api/v1";
 
-//    User API
+    //    User API
     public static final String USERS = API + "/users";
     public static final String REGISTER_USER = "/register";
     public static final String UPDATE_USER = "/user/{id}";
@@ -17,7 +17,7 @@ public class UrlMapping {
     public static final String GET_ALL_USERS = "/all-users";
     public static final String GET_USER_DETAILS = "/user/details/{id}";
 
-//    Appointment API
+    //    Appointment API
     public static final String APPOINTMENTS = API + "/appointments";
     public static final String BOOK_APPOINTMENT = "/book-appointment";
     public static final String GET_ALL_APPOINTMENTS = "/all-appointments";
@@ -29,21 +29,21 @@ public class UrlMapping {
     public static final String APPROVE_APPOINTMENT = "/appointment/approve/{id}";
     public static final String DECLINE_APPOINTMENT = "/appointment/decline/{id}";
 
-//    Pet APT
+    //    Pet APT
     public static final String PETS = API + "/pets";
     public static final String GET_ALL_PETS = "/all-pets";
     public static final String UPDATE_PET = "/pet/{id}";
     public static final String DELETE_PET = "/pet/{id}";
     public static final String GET_PET_BY_ID = "/pet/{id}";
 
-//    Photo API
+    //    Photo API
     public static final String PHOTOS = API + "/photos";
     public static final String UPLOAD_PHOTO = "/upload-photo";
     public static final String UPDATE_PHOTO = "/photo/{id}";
     public static final String DELETE_PHOTO = "/photo/{photoId}/user/{userId}";
     public static final String GET_PHOTO_BY_ID = "/photo/{id}";
 
-//    Review API
+    //    Review API
     public static final String REVIEWS = API + "/reviews";
     public static final String SUBMIT_REVIEW = "/submit-review/{reviewerId}/{veterinarianId}";
     public static final String UPDATE_REVIEW = "/review/{id}";
@@ -51,11 +51,12 @@ public class UrlMapping {
     public static final String GET_AVERAGE_STARS_FOR_VET = "/vet/avg-star/{veterinarianId}";
     public static final String GET_REVIEWS_BY_ID = "/user/{id}";
 
-//    Authentication
+    //    Authentication
     public static final String AUTHENTICATION = API + "/authentication";
     public static final String LOGIN = "/log-in";
+    public static final String VERIFY_EMAIL = "/verify-email";
 
-//    Verification Token
+    //    Verification Token
     public static final String TOKEN_VERIFICATION = API + "/verification";
     public static final String VALIDATE_TOKEN = "/validate-token";
     public static final String SAVE_TOKEN_FOR_USER = "/user/save-token";
@@ -63,7 +64,7 @@ public class UrlMapping {
     public static final String GENERATE_NEW_TOKEN = "/generate-new-token";
     public static final String CHECK_TOKEN_EXPIRATION = "/check-token-expiration";
 
-//    constructor
+    //    constructor
     private UrlMapping() {
         throw new AppException(ErrorCode.INITIATE_UTILITIES);
     }

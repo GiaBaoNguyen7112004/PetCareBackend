@@ -21,8 +21,8 @@ public class VerificationTokenController {
     VerificationTokenService verificationTokenService;
 
     @PostMapping(UrlMapping.VALIDATE_TOKEN)
-    public ResponseEntity<ApiResponse> register(@RequestBody String token) {
-        verificationTokenService.checkValidToken(token);
+    public ResponseEntity<ApiResponse> validateToken(@RequestBody String token) {
+        verificationTokenService.validateToken(token);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.VALID_TOKEN)
                 .build();
@@ -40,7 +40,7 @@ public class VerificationTokenController {
 
     @PostMapping(UrlMapping.SAVE_TOKEN_FOR_USER)
     public ResponseEntity<ApiResponse> saveTokenForUser(@RequestBody VerificationTokenCreationRequest
-                                                                    verificationTokenCreationRequest) {
+                                                                verificationTokenCreationRequest) {
         verificationTokenService.saveVerificationTokenForUser(verificationTokenCreationRequest);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.CREATE_SUCCESS)

@@ -24,15 +24,15 @@ public class VerificationTokenServiceImp implements VerificationTokenService {
     UserRepository userRepository;
 
     @Override
-    public void checkValidToken(String token) {
+    public void validateToken(String token) {
         Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
         if (verificationToken.isEmpty()) {
             throw new AppException(ErrorCode.INVALID_VERIFICATION_TOKEN);
         }
 
         User user = verificationToken.get().getUser();
-        if(user.isEnabled()) throw new AppException(ErrorCode.ALREADY_VERIFIED_ACCOUNT);
-        if(isExpired(token)) throw new AppException(ErrorCode.EXPIRED_TOKEN);
+        if (user.isEnabled()) throw new AppException(ErrorCode.ALREADY_VERIFIED_ACCOUNT);
+        if (isExpired(token)) throw new AppException(ErrorCode.EXPIRED_TOKEN);
 
         user.setEnabled(true);
         userRepository.save(user);
