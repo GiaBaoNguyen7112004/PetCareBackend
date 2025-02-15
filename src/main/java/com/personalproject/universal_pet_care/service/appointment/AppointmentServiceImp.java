@@ -24,6 +24,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -96,15 +99,14 @@ public class AppointmentServiceImp implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentDTO> getAppointmentByUserId(Long id)
-    {
+    public List<AppointmentDTO> getAppointmentByUserId(Long id) {
         return appointmentRepository.findByUserId(id).stream().map(appointmentMapper::toAppointmentDTO).toList();
     }
 
     @Override
     public AppointmentDTO cancelAppointment(Long id) {
         return appointmentRepository.findById(id).filter(
-                appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+                        appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
                 .map(appointment -> {
                     appointment.setStatus(AppointmentStatus.CANCELLED);
                     return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
@@ -115,7 +117,7 @@ public class AppointmentServiceImp implements AppointmentService {
     @Override
     public AppointmentDTO approveAppointment(Long id) {
         return appointmentRepository.findById(id).filter(
-                appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+                        appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
                 .map(appointment -> {
                     appointment.setStatus(AppointmentStatus.APPROVED);
                     applicationEventPublisher.publishEvent(new AppointmentApprovedEvent(appointment));
@@ -127,12 +129,53 @@ public class AppointmentServiceImp implements AppointmentService {
     @Override
     public AppointmentDTO declineAppointment(Long id) {
         return appointmentRepository.findById(id).filter(
-                appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+                        appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
                 .map(appointment -> {
                     appointment.setStatus(AppointmentStatus.NOT_APPROVED);
                     applicationEventPublisher.publishEvent(new AppointmentDeclinedEvent(appointment));
                     return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
                 })
                 .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
+    }
+
+    @Override
+    public void setAppointmentStatus(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND));
+        LocalDate appointmentDate = appointment.getAppointmentDate();
+        LocalDate currentDate = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();
+        LocalTime appointmentEndTime = appointment.getAppointmentTime()
+                .plusMinutes(2).truncatedTo(ChronoUnit.MINUTES);
+
+        switch (appointment.getStatus()) {
+            case APPROVED -> {
+                if ((currentDate.isBefore(appointmentDate) || currentDate.equals(appointmentDate))
+                        && (currentTime.isBefore(appointmentEndTime) || currentTime.equals(appointmentEndTime))) {
+                    appointment.setStatus(AppointmentStatus.UP_COMING);
+                }
+            }
+            case UP_COMING -> {
+                if (currentDate.equals(appointmentDate) && currentTime.isBefore(appointmentEndTime)) {
+                    appointment.setStatus(AppointmentStatus.ON_GOING);
+                }
+            }
+
+            case ON_GOING -> {
+                if ((currentDate.isAfter(appointmentDate) || currentDate.equals(appointmentDate))
+                        && currentTime.isAfter(appointmentEndTime)) {
+                    appointment.setStatus(AppointmentStatus.COMPLETED);
+                }
+            }
+
+            case WAITING_FOR_APPROVAL -> {
+                if ((currentDate.equals(appointmentDate) || currentDate.isAfter(appointmentDate))
+                        && currentTime.isAfter(appointmentEndTime)) {
+                    appointment.setStatus(AppointmentStatus.NOT_APPROVED);
+                }
+            }
+            default -> throw new AppException(ErrorCode.APPOINTMENT_NOT_FOUND);
+        }
+        appointmentRepository.save(appointment);
     }
 }

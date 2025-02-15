@@ -35,13 +35,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String token = parseJwt(request);
         if(StringUtils.hasText(token) && jwtUtils.verifyToken(token)) {
-            log.info("Verify thanh cong token");
             UserDetails userDetails = appUserDetailsService.loadUserByUsername(jwtUtils.getUsernameFromToken(token));
-            log.info("Tim duoc theo username");
+            //kiem tra tai khoan co bi ban hay khong
             var authentication = new UsernamePasswordAuthenticationToken(userDetails,
                     null, userDetails.getAuthorities());
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
+            //phan quyen dua tren cai nay duoc khong?
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
