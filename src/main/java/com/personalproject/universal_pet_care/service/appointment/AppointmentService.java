@@ -26,6 +26,4 @@ public interface AppointmentService {
     AppointmentDTO approveAppointment(Long id);
 
     AppointmentDTO declineAppointment(Long id);
-
-    void setAppointmentStatus(Long appointmentId);
 }

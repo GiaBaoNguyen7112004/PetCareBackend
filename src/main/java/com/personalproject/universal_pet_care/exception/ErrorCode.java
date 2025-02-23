@@ -30,8 +30,11 @@ public enum ErrorCode {
     SENDING_EMAIL_FAILED(1015, "Sending email failed", HttpStatus.BAD_REQUEST),
     APPOINTMENT_NOT_FOUND(1016, "Appointment not found", HttpStatus.NOT_FOUND),
     ROLE_NOT_FOUND(1017, "Role not found", HttpStatus.NOT_FOUND),
+    INVALID_TIME(1018, "Invalid time", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND(1019, "User not found", HttpStatus.NOT_FOUND),
+    APPOINTMENT_NOT_APPROVED(1020, "Appointment is still not approved", HttpStatus.CONFLICT),
+    APPOINTMENT_UPDATE_FAILED(1021, "Cannot update appointment being approved", HttpStatus.CONFLICT),
     ;
-
 
     int code;
     String message;

@@ -2,10 +2,12 @@ package com.personalproject.universal_pet_care.service.pet;
 
 
 import com.personalproject.universal_pet_care.dto.PetDTO;
+import com.personalproject.universal_pet_care.entity.Appointment;
 import com.personalproject.universal_pet_care.entity.Pet;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
 import com.personalproject.universal_pet_care.mapper.PetMapper;
+import com.personalproject.universal_pet_care.payload.request.AppointmentBookingRequest;
 import com.personalproject.universal_pet_care.payload.request.PetUpdatingRequest;
 import com.personalproject.universal_pet_care.repository.PetRepository;
 import lombok.AccessLevel;
@@ -23,14 +25,16 @@ public class PetServiceImp implements PetService {
     PetMapper petMapper;
 
     @Override
-    public void savePetForAppointment(List<Pet> pets)
-    {
-        petRepository.saveAll(pets);
+    public List<Pet> savePetForAppointment(Appointment appointment,
+                                           AppointmentBookingRequest appointmentBookingRequest) {
+        List<Pet> pets = appointmentBookingRequest.getPetRegistrationRequests().stream().map(petMapper::toPet)
+                .toList();
+        pets.forEach(pet -> pet.setAppointment(appointment));
+        return petRepository.saveAll(pets);
     }
 
     @Override
-    public PetDTO updatePet(long id, PetUpdatingRequest petUpdatingRequest)
-    {
+    public PetDTO updatePet(long id, PetUpdatingRequest petUpdatingRequest) {
         Pet pet = petRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND));
         petMapper.updatePet(pet, petUpdatingRequest);
 
@@ -38,16 +42,14 @@ public class PetServiceImp implements PetService {
     }
 
     @Override
-    public PetDTO getPetById(long id)
-    {
+    public PetDTO getPetById(long id) {
         return petMapper.toPetDTO(petRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND)));
     }
 
     @Override
-    public void deletePet(long id)
-    {
-       petRepository.deleteById(id);
+    public void deletePet(long id) {
+        petRepository.deleteById(id);
     }
 
     @Override
