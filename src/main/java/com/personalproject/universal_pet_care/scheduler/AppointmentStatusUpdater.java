@@ -38,8 +38,7 @@ public class AppointmentStatusUpdater {
         List<ScheduledFuture<?>> tasks = new ArrayList<>();
         Map<AppointmentStatus, Duration> statusSchedule = Map.of(
                 AppointmentStatus.UP_COMING, Duration.ofMinutes(-2),
-                AppointmentStatus.ON_GOING, Duration.ZERO,
-                AppointmentStatus.COMPLETED, Duration.ofMinutes(2)
+                AppointmentStatus.ON_GOING, Duration.ZERO
         );
 
         for (var entry : statusSchedule.entrySet()) {

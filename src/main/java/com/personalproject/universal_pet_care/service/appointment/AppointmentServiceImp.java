@@ -7,6 +7,7 @@ import com.personalproject.universal_pet_care.entity.User;
 import com.personalproject.universal_pet_care.enums.AppointmentStatus;
 import com.personalproject.universal_pet_care.event.AppointmentApprovedEvent;
 import com.personalproject.universal_pet_care.event.AppointmentBookedEvent;
+import com.personalproject.universal_pet_care.event.AppointmentCompletedEvent;
 import com.personalproject.universal_pet_care.event.AppointmentDeclinedEvent;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
@@ -134,6 +135,18 @@ public class AppointmentServiceImp implements AppointmentService {
                 .map(appointment -> {
                     appointment.setStatus(AppointmentStatus.NOT_APPROVED);
                     applicationEventPublisher.publishEvent(new AppointmentDeclinedEvent(appointment));
+                    return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
+                })
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
+    }
+
+    @Override
+    public AppointmentDTO confirmCompleteAppointment(Long id) {
+        return appointmentRepository.findById(id).filter(
+                        appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+                .map(appointment -> {
+                    appointment.setStatus(AppointmentStatus.COMPLETED);
+                    applicationEventPublisher.publishEvent(new AppointmentCompletedEvent(appointment));
                     return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
                 })
                 .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));

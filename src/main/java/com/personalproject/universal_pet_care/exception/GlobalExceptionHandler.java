@@ -4,6 +4,7 @@ import com.personalproject.universal_pet_care.payload.response.ApiResponse;
 
 import jakarta.mail.MessagingException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -69,6 +70,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnsupportedEncodingException.class)
     public ResponseEntity<ApiResponse> handlingUnsupportedEncodingException(UnsupportedEncodingException e) {
         ErrorCode errorCode = ErrorCode.SENDING_EMAIL_FAILED;
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message(errorCode.getMessage())
+                .data(e.getMessage())
+                .code(errorCode.getCode())
+                .build();
+
+        return ResponseEntity.status(errorCode.getHttpStatusCode()).body(apiResponse);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiResponse> handlingBadCredentialsException(BadCredentialsException e) {
+        ErrorCode errorCode = ErrorCode.UNAUTHENTICATED;
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(errorCode.getMessage())

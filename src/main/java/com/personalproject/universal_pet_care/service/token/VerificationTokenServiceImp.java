@@ -4,12 +4,13 @@ import com.personalproject.universal_pet_care.entity.User;
 import com.personalproject.universal_pet_care.entity.VerificationToken;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
-import com.personalproject.universal_pet_care.payload.request.VerificationTokenCreationRequest;
+
 import com.personalproject.universal_pet_care.repository.VerificationTokenRepository;
 import com.personalproject.universal_pet_care.repository.user.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,14 +37,12 @@ public class VerificationTokenServiceImp implements VerificationTokenService {
 
         user.setEnabled(true);
         userRepository.save(user);
+        verificationTokenRepository.delete(verificationToken.get());
     }
 
     @Override
-    public void saveVerificationTokenForUser(VerificationTokenCreationRequest verificationTokenCreationRequest) {
-        User user = userRepository.findById(verificationTokenCreationRequest.getUserId())
-                .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND));
-
-        VerificationToken verificationToken = new VerificationToken(user, verificationTokenCreationRequest.getToken());
+    public void saveVerificationTokenForUser(User user, String token) {
+        VerificationToken verificationToken = new VerificationToken(user, token);
         verificationTokenRepository.save(verificationToken);
     }
 

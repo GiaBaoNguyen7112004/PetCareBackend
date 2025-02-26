@@ -1,12 +1,13 @@
 package com.personalproject.universal_pet_care.service.token;
 
+import com.personalproject.universal_pet_care.entity.User;
 import com.personalproject.universal_pet_care.entity.VerificationToken;
-import com.personalproject.universal_pet_care.payload.request.VerificationTokenCreationRequest;
+
 
 public interface VerificationTokenService {
     void validateToken(String token);
 
-    void saveVerificationTokenForUser(VerificationTokenCreationRequest verificationTokenCreationRequest);
+    void saveVerificationTokenForUser(User user, String token);
 
     void deleteToken(Long id);
 

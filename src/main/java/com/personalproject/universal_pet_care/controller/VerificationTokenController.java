@@ -1,7 +1,6 @@
 package com.personalproject.universal_pet_care.controller;
 
 
-import com.personalproject.universal_pet_care.payload.request.VerificationTokenCreationRequest;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
 import com.personalproject.universal_pet_care.service.token.VerificationTokenService;
 import com.personalproject.universal_pet_care.utils.FeedbackMessage;
@@ -34,25 +33,6 @@ public class VerificationTokenController {
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.VALID_TOKEN)
                 .data(verificationTokenService.isExpired(token))
-                .build();
-        return ResponseEntity.ok().body(apiResponse);
-    }
-
-    @PostMapping(UrlMapping.SAVE_TOKEN_FOR_USER)
-    public ResponseEntity<ApiResponse> saveTokenForUser(@RequestBody VerificationTokenCreationRequest
-                                                                verificationTokenCreationRequest) {
-        verificationTokenService.saveVerificationTokenForUser(verificationTokenCreationRequest);
-        ApiResponse apiResponse = ApiResponse.builder()
-                .message(FeedbackMessage.CREATE_SUCCESS)
-                .build();
-        return ResponseEntity.ok().body(apiResponse);
-    }
-
-    @PutMapping(UrlMapping.GENERATE_NEW_TOKEN)
-    public ResponseEntity<ApiResponse> generateNewToken(@RequestBody String oldToken) {
-        ApiResponse apiResponse = ApiResponse.builder()
-                .data(verificationTokenService.generateNewVerificationToken(oldToken))
-                .message(FeedbackMessage.UPDATE_SUCCESS)
                 .build();
         return ResponseEntity.ok().body(apiResponse);
     }

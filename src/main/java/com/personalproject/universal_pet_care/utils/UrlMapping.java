@@ -28,6 +28,7 @@ public class UrlMapping {
     public static final String CANCEL_APPOINTMENT = "/appointment/cancel/{id}";
     public static final String APPROVE_APPOINTMENT = "/appointment/approve/{id}";
     public static final String DECLINE_APPOINTMENT = "/appointment/decline/{id}";
+    public static final String CONFIRM_COMPLETE_APPOINTMENT = "/appointment/confirm/{id}";
 
     //    Pet APT
     public static final String PETS = API + "/pets";
@@ -55,13 +56,15 @@ public class UrlMapping {
     public static final String AUTHENTICATION = API + "/authentication";
     public static final String LOGIN = "/log-in";
     public static final String VERIFY_EMAIL = "/verify-email";
+    public static final String REQUEST_PASSWORD_RESET = "/request-password-reset";
+    public static final String RESET_PASSWORD = "/reset-password";
+
 
     //    Verification Token
     public static final String TOKEN_VERIFICATION = API + "/verification";
     public static final String VALIDATE_TOKEN = "/validate-token";
-    public static final String SAVE_TOKEN_FOR_USER = "/user/save-token";
+
     public static final String DELETE_TOKEN = "/token/{tokenId}";
-    public static final String GENERATE_NEW_TOKEN = "/generate-new-token";
     public static final String CHECK_TOKEN_EXPIRATION = "/check-token-expiration";
 
     //    constructor

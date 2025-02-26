@@ -106,4 +106,13 @@ public class AppointmentController {
                 .build();
         return ResponseEntity.ok().body(apiResponse);
     }
+
+    @PostMapping(UrlMapping.CONFIRM_COMPLETE_APPOINTMENT)
+    public ResponseEntity<ApiResponse> confirmCompleteAppointment(@PathVariable Long id) {
+        ApiResponse apiResponse = ApiResponse.builder()
+                .data(appointmentService.confirmCompleteAppointment(id))
+                .message(FeedbackMessage.APPOINTMENT_COMPLETED)
+                .build();
+        return ResponseEntity.ok().body(apiResponse);
+    }
 }

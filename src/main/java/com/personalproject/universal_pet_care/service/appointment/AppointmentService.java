@@ -26,4 +26,6 @@ public interface AppointmentService {
     AppointmentDTO approveAppointment(Long id);
 
     AppointmentDTO declineAppointment(Long id);
+
+    AppointmentDTO confirmCompleteAppointment(Long id);
 }

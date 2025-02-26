@@ -1,10 +1,13 @@
 package com.personalproject.universal_pet_care.controller;
 
-import com.personalproject.universal_pet_care.dto.AuthenticationDTO;
+
 import com.personalproject.universal_pet_care.payload.request.AuthenticationRequest;
+import com.personalproject.universal_pet_care.payload.request.PasswordResetConfirmRequest;
+import com.personalproject.universal_pet_care.payload.request.PasswordResetEmailRequest;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
-import com.personalproject.universal_pet_care.security.jwt.JwtUtils;
-import com.personalproject.universal_pet_care.security.user.AppUserDetails;
+
+import com.personalproject.universal_pet_care.service.authentication.AuthenticationService;
+import com.personalproject.universal_pet_care.service.password.PasswordResetService;
 import com.personalproject.universal_pet_care.service.token.VerificationTokenService;
 import com.personalproject.universal_pet_care.utils.FeedbackMessage;
 import com.personalproject.universal_pet_care.utils.UrlMapping;
@@ -14,10 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,30 +25,17 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationController {
-    AuthenticationManager authenticationManager;
-    JwtUtils jwtUtils;
+    AuthenticationService authenticationService;
     VerificationTokenService verificationTokenService;
+    PasswordResetService passwordResetService;
 
     @PostMapping(UrlMapping.LOGIN)
     public ResponseEntity<ApiResponse> authenticate(
             @Valid @RequestBody AuthenticationRequest authenticationRequest) {
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getEmail(), authenticationRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        AppUserDetails appUserDetails = (AppUserDetails) authentication.getPrincipal();
-
-        AuthenticationDTO authenticationDTO = AuthenticationDTO.builder()
-                .id(appUserDetails.getUser().getId())
-                .token(jwtUtils.generateToken(authentication))
-                .build();
-
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.AUTHENTICATE_SUCCESS)
-                .data(authenticationDTO)
+                .data(authenticationService.authenticate(authenticationRequest))
                 .build();
-
         return ResponseEntity.ok().body(apiResponse);
     }
 
@@ -61,4 +48,23 @@ public class AuthenticationController {
 
         return ResponseEntity.ok().body(apiResponse);
     }
+
+    @PostMapping(UrlMapping.REQUEST_PASSWORD_RESET)
+    public ResponseEntity<ApiResponse> requestPasswordReset(@RequestBody PasswordResetEmailRequest passwordResetEmailRequest) {
+        passwordResetService.requestResetPassword(passwordResetEmailRequest);
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message(FeedbackMessage.REQUEST_PASSWORD_RESET_SUCCESS)
+                .build();
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @PostMapping(UrlMapping.RESET_PASSWORD)
+    public ResponseEntity<ApiResponse> resetPassword(@RequestBody PasswordResetConfirmRequest passwordResetConfirmRequest) {
+        passwordResetService.resetPassword(passwordResetConfirmRequest);
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message(FeedbackMessage.RESET_PASSWORD_SUCCESS)
+                .build();
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
 }

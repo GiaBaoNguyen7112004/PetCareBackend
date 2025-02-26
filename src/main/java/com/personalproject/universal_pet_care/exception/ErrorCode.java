@@ -26,7 +26,6 @@ public enum ErrorCode {
     INITIATE_UTILITIES(1011, "Initiate utilities", HttpStatus.UNAUTHORIZED),
     ALREADY_VERIFIED_ACCOUNT(1012, "Account has already been verified", HttpStatus.CONFLICT),
     EXPIRED_TOKEN(1013, "Token is expired", HttpStatus.UNAUTHORIZED),
-    VALIDATE_TOKEN(1014, "Token validation failed", HttpStatus.UNAUTHORIZED),
     SENDING_EMAIL_FAILED(1015, "Sending email failed", HttpStatus.BAD_REQUEST),
     APPOINTMENT_NOT_FOUND(1016, "Appointment not found", HttpStatus.NOT_FOUND),
     ROLE_NOT_FOUND(1017, "Role not found", HttpStatus.NOT_FOUND),
@@ -34,6 +33,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(1019, "User not found", HttpStatus.NOT_FOUND),
     APPOINTMENT_NOT_APPROVED(1020, "Appointment is still not approved", HttpStatus.CONFLICT),
     APPOINTMENT_UPDATE_FAILED(1021, "Cannot update appointment being approved", HttpStatus.CONFLICT),
+    EMAIL_NOT_FOUND(1022, "Email not found", HttpStatus.NOT_FOUND),
+    MISSING_PASSWORD(1024, "Missing password", HttpStatus.BAD_REQUEST),
     ;
 
     int code;
