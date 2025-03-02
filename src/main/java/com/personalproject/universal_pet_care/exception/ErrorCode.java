@@ -35,6 +35,7 @@ public enum ErrorCode {
     APPOINTMENT_UPDATE_FAILED(1021, "Cannot update appointment being approved", HttpStatus.CONFLICT),
     EMAIL_NOT_FOUND(1022, "Email not found", HttpStatus.NOT_FOUND),
     MISSING_PASSWORD(1024, "Missing password", HttpStatus.BAD_REQUEST),
+
     ;
 
     int code;

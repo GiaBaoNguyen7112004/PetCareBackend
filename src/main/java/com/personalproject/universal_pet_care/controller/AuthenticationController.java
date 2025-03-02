@@ -16,6 +16,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(UrlMapping.AUTHENTICATION)
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class AuthenticationController {
     AuthenticationService authenticationService;
     VerificationTokenService verificationTokenService;
@@ -63,6 +65,15 @@ public class AuthenticationController {
         passwordResetService.resetPassword(passwordResetConfirmRequest);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.RESET_PASSWORD_SUCCESS)
+                .build();
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @PostMapping(UrlMapping.RESEND_PASSWORD_RESET_TOKEN)
+    public ResponseEntity<ApiResponse> resendPasswordResetToken(@RequestBody PasswordResetEmailRequest passwordResetEmailRequest) {
+        authenticationService.resendPasswordResetToken(passwordResetEmailRequest.getEmail());
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message(FeedbackMessage.RESEND_PASSWORD_RESET_TOKEN_SUCCESS)
                 .build();
         return ResponseEntity.ok().body(apiResponse);
     }

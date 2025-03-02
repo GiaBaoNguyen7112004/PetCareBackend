@@ -58,14 +58,15 @@ public class UrlMapping {
     public static final String VERIFY_EMAIL = "/verify-email";
     public static final String REQUEST_PASSWORD_RESET = "/request-password-reset";
     public static final String RESET_PASSWORD = "/reset-password";
+    public static final String RESEND_PASSWORD_RESET_TOKEN = "/resend-password-reset-token";
 
 
     //    Verification Token
     public static final String TOKEN_VERIFICATION = API + "/verification";
     public static final String VALIDATE_TOKEN = "/validate-token";
-
     public static final String DELETE_TOKEN = "/token/{tokenId}";
     public static final String CHECK_TOKEN_EXPIRATION = "/check-token-expiration";
+    public static final String RESEND_EMAIL_VERIFICATION_TOKEN = "/resend-email-verification-token";
 
     //    constructor
     private UrlMapping() {

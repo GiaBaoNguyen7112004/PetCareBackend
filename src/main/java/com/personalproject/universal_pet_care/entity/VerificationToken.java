@@ -19,7 +19,7 @@ public class VerificationToken {
     String token;
     LocalDateTime expiryTime;
 
-    @ManyToOne
+    @OneToOne
     User user;
 
     public VerificationToken(User user, String token) {

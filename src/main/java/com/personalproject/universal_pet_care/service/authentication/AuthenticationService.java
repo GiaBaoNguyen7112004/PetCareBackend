@@ -5,4 +5,6 @@ import com.personalproject.universal_pet_care.payload.request.AuthenticationRequ
 
 public interface AuthenticationService {
     AuthenticationDTO authenticate(AuthenticationRequest authenticationRequest);
+
+    void resendPasswordResetToken(String email);
 }

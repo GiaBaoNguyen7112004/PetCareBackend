@@ -1,6 +1,7 @@
 package com.personalproject.universal_pet_care.event.listener;
 
 import com.personalproject.universal_pet_care.entity.User;
+import com.personalproject.universal_pet_care.entity.VerificationToken;
 import com.personalproject.universal_pet_care.event.*;
 import com.personalproject.universal_pet_care.service.email.EmailService;
 import com.personalproject.universal_pet_care.service.token.VerificationTokenService;
@@ -28,13 +29,9 @@ public class EmailListenerService {
     //    begin user registration event
     @EventListener
     private void handleUserRegistrationEvent(UserRegistrationEvent event) {
-        User user = event.getUser();
-        String verificationToken = UUID.randomUUID().toString();
-
-        verificationTokenService.saveVerificationTokenForUser(user, verificationToken);
-
-        String verificationUrl = frontendBaseUrl + "/email-verification?token=" + verificationToken;
-        sendUserRegistrationVerificationEmail(user, verificationUrl);
+        String token = generateOrRecreateToken(event.getUser());
+        String verificationUrl = frontendBaseUrl + "/email-verification?token=" + token;
+        sendUserRegistrationVerificationEmail(event.getUser(), verificationUrl);
     }
 
     private void sendUserRegistrationVerificationEmail(User user, String url) {
@@ -151,12 +148,9 @@ public class EmailListenerService {
     //    begin password reset event
     @EventListener
     private void handlePasswordResetRequestEvent(PasswordResetEvent event) {
-        User user = event.getUser();
-        String token = UUID.randomUUID().toString();
-
-        verificationTokenService.saveVerificationTokenForUser(user, token);
+        String token = generateOrRecreateToken(event.getUser());
         String resetUrl = frontendBaseUrl + "/reset-password?token=" + token;
-        sendPasswordResetEmail(user, resetUrl);
+        sendPasswordResetEmail(event.getUser(), resetUrl);
     }
 
     private void sendPasswordResetEmail(User user, String resetUrl) {
@@ -170,5 +164,14 @@ public class EmailListenerService {
                 "<p><strong>Universal Pet Care Team</strong></p>";
 
         emailService.sendEmail(user.getEmail(), subject, senderName, mailContent);
+    }
+
+    private String generateOrRecreateToken(User user) {
+        if (user.getVerificationToken() != null) {
+            VerificationToken verificationToken = user.getVerificationToken();
+            return verificationTokenService.recreateNewVerificationToken(verificationToken.getToken());
+        } else {
+            return verificationTokenService.saveVerificationTokenForUser(user, UUID.randomUUID().toString());
+        }
     }
 }

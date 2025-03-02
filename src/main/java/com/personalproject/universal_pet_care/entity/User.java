@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
+
 import java.util.Objects;
 
 @Entity(name = "users")
@@ -37,16 +37,16 @@ public class User {
     Photo photo;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name ="user_role",
-            joinColumns = @JoinColumn(name="user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name="role_id", referencedColumnName = "id"))
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     Collection<Role> roles;
 
-    @OneToMany(mappedBy = "user")
-    List<VerificationToken> verificationTokens;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    VerificationToken verificationToken;
 
     public Collection<Role> getRoles() {
-        if(Objects.isNull(roles)) roles = new HashSet<>();
+        if (Objects.isNull(roles)) roles = new HashSet<>();
         return roles;
     }
 }
