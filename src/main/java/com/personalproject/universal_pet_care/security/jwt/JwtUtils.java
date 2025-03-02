@@ -41,25 +41,21 @@ public class JwtUtils {
                 .signWith(getKey(), SignatureAlgorithm.HS512).compact();
     }
 
-    private Key getKey()
-    {
+    private Key getKey() {
         return Keys.hmacShaKeyFor(Base64.getDecoder().decode(secretKey));
     }
 
-//    Dung parserBuilder() de tao ra 1 doi tuong JwtParser dung de phan tich va giai ma token
-    public String getUsernameFromToken(String token)
-    {
+    //    Dung parserBuilder() de tao ra 1 doi tuong JwtParser dung de phan tich va giai ma token
+    public String getUsernameFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(getKey())
                 .build().parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean verifyToken(String token)
-    {
-        try{
+    public boolean verifyToken(String token) {
+        try {
             Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token);
             return true;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
     }

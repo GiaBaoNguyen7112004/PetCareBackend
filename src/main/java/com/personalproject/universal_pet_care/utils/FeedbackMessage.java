@@ -25,6 +25,7 @@ public class FeedbackMessage {
     public static final String REQUEST_PASSWORD_RESET_SUCCESS = "Request password reset successfully";
     public static final String RESET_PASSWORD_SUCCESS = "Reset password successfully";
     public static final String RESEND_PASSWORD_RESET_TOKEN_SUCCESS = "Resend password reset token successfully";
+    public static final String CHANGE_PASSWORD_SUCCESS = "Change password successfully";
 
     //    Verification
     public static final String RESEND_EMAIL_VERIFICATION_TOKEN_SUCCESS = "Resend email verification token successfully";

@@ -2,6 +2,7 @@ package com.personalproject.universal_pet_care.controller;
 
 
 import com.personalproject.universal_pet_care.payload.request.AuthenticationRequest;
+import com.personalproject.universal_pet_care.payload.request.ChangePasswordRequest;
 import com.personalproject.universal_pet_care.payload.request.PasswordResetConfirmRequest;
 import com.personalproject.universal_pet_care.payload.request.PasswordResetEmailRequest;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
@@ -74,6 +75,15 @@ public class AuthenticationController {
         authenticationService.resendPasswordResetToken(passwordResetEmailRequest.getEmail());
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.RESEND_PASSWORD_RESET_TOKEN_SUCCESS)
+                .build();
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @PutMapping(UrlMapping.CHANGE_PASSWORD)
+    public ResponseEntity<ApiResponse> changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest) {
+        authenticationService.changePassword(changePasswordRequest);
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message(FeedbackMessage.CHANGE_PASSWORD_SUCCESS)
                 .build();
         return ResponseEntity.ok().body(apiResponse);
     }

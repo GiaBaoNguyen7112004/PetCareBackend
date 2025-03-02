@@ -3,6 +3,7 @@ package com.personalproject.universal_pet_care.exception;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
 
 import jakarta.mail.MessagingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -11,8 +12,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Objects;
 
-
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(AppException.class)
@@ -30,11 +32,19 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse> handlingMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        ErrorCode errorCode = ErrorCode.INVALID_DATA;
+        ErrorCode errorCode = ErrorCode.INVALID_KEY_OF_VALIDATION;
+        String enumKey = Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage();
+
+        if (enumKey != null && !enumKey.isEmpty()) {
+            try {
+                errorCode = ErrorCode.valueOf(enumKey);
+            } catch (IllegalArgumentException ignored) {
+                log.warn("Invalid enumKey '{}' for ErrorCode, using default: {}", enumKey, errorCode.name());
+            }
+        }
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(errorCode.getMessage())
-                .data(e.getMessage())
                 .code(errorCode.getCode())
                 .build();
 
