@@ -1,8 +1,8 @@
 package com.personalproject.universal_pet_care.service.appointment;
 
 import com.personalproject.universal_pet_care.dto.AppointmentDTO;
-import com.personalproject.universal_pet_care.payload.request.AppointmentBookingRequest;
-import com.personalproject.universal_pet_care.payload.request.AppointmentUpdatingRequest;
+import com.personalproject.universal_pet_care.payload.request.appointment.AppointmentBookingRequest;
+import com.personalproject.universal_pet_care.payload.request.appointment.AppointmentUpdatingRequest;
 
 import java.util.List;
 

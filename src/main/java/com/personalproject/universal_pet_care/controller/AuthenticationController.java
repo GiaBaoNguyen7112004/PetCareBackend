@@ -1,10 +1,7 @@
 package com.personalproject.universal_pet_care.controller;
 
 
-import com.personalproject.universal_pet_care.payload.request.AuthenticationRequest;
-import com.personalproject.universal_pet_care.payload.request.ChangePasswordRequest;
-import com.personalproject.universal_pet_care.payload.request.PasswordResetConfirmRequest;
-import com.personalproject.universal_pet_care.payload.request.PasswordResetEmailRequest;
+import com.personalproject.universal_pet_care.payload.request.authentication.*;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
 
 import com.personalproject.universal_pet_care.service.authentication.AuthenticationService;
@@ -53,7 +50,8 @@ public class AuthenticationController {
     }
 
     @PostMapping(UrlMapping.REQUEST_PASSWORD_RESET)
-    public ResponseEntity<ApiResponse> requestPasswordReset(@RequestBody PasswordResetEmailRequest passwordResetEmailRequest) {
+    public ResponseEntity<ApiResponse> requestPasswordReset(@RequestBody @Valid
+                                                            PasswordResetEmailRequest passwordResetEmailRequest) {
         passwordResetService.requestResetPassword(passwordResetEmailRequest);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.REQUEST_PASSWORD_RESET_SUCCESS)
@@ -62,7 +60,8 @@ public class AuthenticationController {
     }
 
     @PostMapping(UrlMapping.RESET_PASSWORD)
-    public ResponseEntity<ApiResponse> resetPassword(@RequestBody PasswordResetConfirmRequest passwordResetConfirmRequest) {
+    public ResponseEntity<ApiResponse> resetPassword(@RequestBody @Valid
+                                                     PasswordResetConfirmRequest passwordResetConfirmRequest) {
         passwordResetService.resetPassword(passwordResetConfirmRequest);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.RESET_PASSWORD_SUCCESS)
@@ -71,7 +70,8 @@ public class AuthenticationController {
     }
 
     @PostMapping(UrlMapping.RESEND_PASSWORD_RESET_TOKEN)
-    public ResponseEntity<ApiResponse> resendPasswordResetToken(@RequestBody PasswordResetEmailRequest passwordResetEmailRequest) {
+    public ResponseEntity<ApiResponse> resendPasswordResetToken(@RequestBody @Valid
+                                                                PasswordResetEmailRequest passwordResetEmailRequest) {
         authenticationService.resendPasswordResetToken(passwordResetEmailRequest.getEmail());
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.RESEND_PASSWORD_RESET_TOKEN_SUCCESS)
@@ -88,4 +88,13 @@ public class AuthenticationController {
         return ResponseEntity.ok().body(apiResponse);
     }
 
+    @PostMapping(UrlMapping.RESEND_EMAIL_VERIFICATION_TOKEN)
+    public ResponseEntity<ApiResponse>
+    resendEmailVerificationToken(@RequestBody ResendEmailVerificationTokenRequest resendEmailVerificationTokenRequest) {
+        authenticationService.resendVerificationEmailToken(resendEmailVerificationTokenRequest.getEmail());
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message(FeedbackMessage.RESEND_EMAIL_VERIFICATION_TOKEN_SUCCESS)
+                .build();
+        return ResponseEntity.ok().body(apiResponse);
+    }
 }

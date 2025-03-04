@@ -1,11 +1,12 @@
 package com.personalproject.universal_pet_care.controller;
 
 
-import com.personalproject.universal_pet_care.payload.request.PetUpdatingRequest;
+import com.personalproject.universal_pet_care.payload.request.pet.PetUpdatingRequest;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
 import com.personalproject.universal_pet_care.service.pet.PetService;
 import com.personalproject.universal_pet_care.utils.FeedbackMessage;
 import com.personalproject.universal_pet_care.utils.UrlMapping;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,8 +22,7 @@ public class PetController {
     PetService petService;
 
     @GetMapping(UrlMapping.GET_ALL_PETS)
-    public ResponseEntity<ApiResponse> getAllPets()
-    {
+    public ResponseEntity<ApiResponse> getAllPets() {
         ApiResponse apiResponse = ApiResponse.builder()
                 .data(petService.getAllPets())
                 .message(FeedbackMessage.GET_SUCCESS)
@@ -32,8 +32,7 @@ public class PetController {
     }
 
     @GetMapping(UrlMapping.GET_PET_BY_ID)
-    public ResponseEntity<ApiResponse> getPetById(@PathVariable long id)
-    {
+    public ResponseEntity<ApiResponse> getPetById(@PathVariable long id) {
         ApiResponse apiResponse = ApiResponse.builder()
                 .data(petService.getPetById(id))
                 .message(FeedbackMessage.GET_SUCCESS)
@@ -43,8 +42,8 @@ public class PetController {
     }
 
     @PutMapping(UrlMapping.UPDATE_PET)
-    public ResponseEntity<ApiResponse> updatePet(@PathVariable long id, @RequestBody PetUpdatingRequest petUpdatingRequest)
-    {
+    public ResponseEntity<ApiResponse> updatePet(@PathVariable long id,
+                                                 @RequestBody @Valid PetUpdatingRequest petUpdatingRequest) {
         ApiResponse apiResponse = ApiResponse.builder()
                 .data(petService.updatePet(id, petUpdatingRequest))
                 .message(FeedbackMessage.UPDATE_SUCCESS)
@@ -54,8 +53,7 @@ public class PetController {
     }
 
     @DeleteMapping(UrlMapping.DELETE_PET)
-    public ResponseEntity<ApiResponse> getAllPets(@PathVariable long id)
-    {
+    public ResponseEntity<ApiResponse> getAllPets(@PathVariable long id) {
         petService.deletePet(id);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.DELETE_SUCCESS)

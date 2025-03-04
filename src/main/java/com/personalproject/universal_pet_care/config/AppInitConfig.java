@@ -3,7 +3,7 @@ package com.personalproject.universal_pet_care.config;
 import com.personalproject.universal_pet_care.entity.Role;
 import com.personalproject.universal_pet_care.enums.UserType;
 import com.personalproject.universal_pet_care.factory.UserFactory;
-import com.personalproject.universal_pet_care.payload.request.RegistrationRequest;
+import com.personalproject.universal_pet_care.payload.request.registration.AdminRegistrationRequest;
 import com.personalproject.universal_pet_care.repository.RoleRepository;
 import com.personalproject.universal_pet_care.repository.user.UserRepository;
 import com.personalproject.universal_pet_care.utils.FeedbackMessage;
@@ -57,7 +57,8 @@ public class AppInitConfig {
                 }
                 roleRepository.saveAll(roles);
 
-                RegistrationRequest registrationRequest = RegistrationRequest.builder()
+                AdminRegistrationRequest registrationRequest = AdminRegistrationRequest
+                        .builder()
                         .email(adminEmail)
                         .firstName(adminFirstName)
                         .password(adminPassword)

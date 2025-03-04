@@ -6,10 +6,11 @@ import com.personalproject.universal_pet_care.entity.Veterinarian;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
 import com.personalproject.universal_pet_care.mapper.UserMapper;
-import com.personalproject.universal_pet_care.payload.request.RegistrationRequest;
+import com.personalproject.universal_pet_care.payload.request.registration.PatientRegistrationRequest;
+import com.personalproject.universal_pet_care.payload.request.registration.RegistrationRequest;
 
 import com.personalproject.universal_pet_care.factory.UserFactory;
-import com.personalproject.universal_pet_care.payload.request.UserUpdatingRequest;
+import com.personalproject.universal_pet_care.payload.request.user.UserUpdatingRequest;
 import com.personalproject.universal_pet_care.repository.user.UserRepository;
 import com.personalproject.universal_pet_care.service.appointment.AppointmentService;
 import com.personalproject.universal_pet_care.service.review.ReviewService;
@@ -18,12 +19,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 @RequiredArgsConstructor
 public class UserServiceImp implements UserService {
     UserFactory userFactory;
@@ -34,6 +37,9 @@ public class UserServiceImp implements UserService {
 
     @Override
     public UserDTO register(RegistrationRequest registrationRequest) {
+        if (registrationRequest instanceof PatientRegistrationRequest) {
+            log.info("kIEM TRA KIEU CUA REGISTRATION REQUEST TRONG REGISTER o userservice");
+        }
         return userMapper.toUserDTO(userFactory.createUser(registrationRequest));
     }
 
@@ -46,31 +52,26 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public UserDTO getUserById(Long id)
-    {
+    public UserDTO getUserById(Long id) {
         return userMapper.toUserDTO(userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND)));
     }
 
     @Override
-    public void deleteUser(Long id)
-    {
+    public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 
     @Override
-    public List<UserDTO> getAllUsers()
-    {
+    public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream().map(userMapper::toUserDTO).toList();
     }
 
     @Override
-    public UserDTO getUserDetails(Long userId)
-    {
+    public UserDTO getUserDetails(Long userId) {
         return userRepository.findById(userId).map(user -> {
             UserDTO userDTO = userMapper.toUserDTO(user);
-            if(user instanceof Veterinarian)
-            {
+            if (user instanceof Veterinarian) {
                 userDTO.setAverageStars(reviewService.getAverageStarForVet(userId));
             }
 

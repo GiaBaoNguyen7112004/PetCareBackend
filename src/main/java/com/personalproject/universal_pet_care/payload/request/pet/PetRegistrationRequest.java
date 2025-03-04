@@ -1,5 +1,6 @@
-package com.personalproject.universal_pet_care.payload.request;
+package com.personalproject.universal_pet_care.payload.request.pet;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PetRegistrationRequest {
     String name;
+    @NotBlank(message = "MISSING_FIELD")
     String type;
     String color;
     String breed;

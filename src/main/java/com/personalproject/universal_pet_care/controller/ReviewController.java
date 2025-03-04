@@ -1,11 +1,12 @@
 package com.personalproject.universal_pet_care.controller;
 
-import com.personalproject.universal_pet_care.payload.request.ReviewSubmissionRequest;
-import com.personalproject.universal_pet_care.payload.request.ReviewUpdatingRequest;
+import com.personalproject.universal_pet_care.payload.request.review.ReviewSubmissionRequest;
+import com.personalproject.universal_pet_care.payload.request.review.ReviewUpdatingRequest;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
 import com.personalproject.universal_pet_care.service.review.ReviewService;
 import com.personalproject.universal_pet_care.utils.FeedbackMessage;
 import com.personalproject.universal_pet_care.utils.UrlMapping;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,7 +22,7 @@ public class ReviewController {
     ReviewService reviewService;
 
     @PostMapping(UrlMapping.SUBMIT_REVIEW)
-    public ResponseEntity<ApiResponse> submitReview(@RequestBody ReviewSubmissionRequest reviewSubmissionRequest,
+    public ResponseEntity<ApiResponse> submitReview(@RequestBody @Valid ReviewSubmissionRequest reviewSubmissionRequest,
                                                     @PathVariable long reviewerId, @PathVariable long veterinarianId) {
         ApiResponse apiResponse = ApiResponse.builder()
                 .data(reviewService.submitReview(reviewSubmissionRequest, reviewerId, veterinarianId))
@@ -33,7 +34,7 @@ public class ReviewController {
 
     @PutMapping(UrlMapping.UPDATE_REVIEW)
     public ResponseEntity<ApiResponse> updateReview(@PathVariable long id,
-                                                    @RequestBody ReviewUpdatingRequest reviewUpdatingRequest) {
+                                                    @RequestBody @Valid ReviewUpdatingRequest reviewUpdatingRequest) {
         ApiResponse apiResponse = ApiResponse.builder()
                 .data(reviewService.updateReview(id, reviewUpdatingRequest))
                 .message(FeedbackMessage.UPDATE_SUCCESS)

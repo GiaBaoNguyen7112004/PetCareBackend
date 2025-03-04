@@ -1,22 +1,19 @@
-package com.personalproject.universal_pet_care.payload.request;
+package com.personalproject.universal_pet_care.payload.request.user;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RegistrationRequest {
+public class UserUpdatingRequest {
+    @NotBlank(message = "MISSING_FIELD")
     String firstName;
     String lastName;
     String gender;
     String phoneNumber;
-    String email;
-    String password;
-    String userType;
-    boolean isEnabled;
     String specialization;
 }

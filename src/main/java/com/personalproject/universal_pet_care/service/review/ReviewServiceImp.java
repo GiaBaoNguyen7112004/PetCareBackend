@@ -6,8 +6,8 @@ import com.personalproject.universal_pet_care.enums.AppointmentStatus;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
 import com.personalproject.universal_pet_care.mapper.ReviewMapper;
-import com.personalproject.universal_pet_care.payload.request.ReviewSubmissionRequest;
-import com.personalproject.universal_pet_care.payload.request.ReviewUpdatingRequest;
+import com.personalproject.universal_pet_care.payload.request.review.ReviewSubmissionRequest;
+import com.personalproject.universal_pet_care.payload.request.review.ReviewUpdatingRequest;
 import com.personalproject.universal_pet_care.repository.AppointmentRepository;
 import com.personalproject.universal_pet_care.repository.ReviewRepository;
 import com.personalproject.universal_pet_care.repository.user.UserRepository;
@@ -29,14 +29,13 @@ public class ReviewServiceImp implements ReviewService {
     UserRepository userRepository;
 
     @Override
-    public ReviewDTO submitReview(ReviewSubmissionRequest reviewSubmissionRequest, long reviewerId, long veterinarianId)
-    {
-        if(reviewerId == veterinarianId) throw new AppException(ErrorCode.REVIEW_YOURSELF);
+    public ReviewDTO submitReview(ReviewSubmissionRequest reviewSubmissionRequest, long reviewerId, long veterinarianId) {
+        if (reviewerId == veterinarianId) throw new AppException(ErrorCode.REVIEW_YOURSELF);
 
-        if(reviewRepository.existsByReviewerIdAndVeterinarianId(reviewerId, veterinarianId))
+        if (reviewRepository.existsByReviewerIdAndVeterinarianId(reviewerId, veterinarianId))
             throw new AppException(ErrorCode.ALREADY_REVIEWED);
 
-        if(!appointmentRepository.existsBySenderIdAndRecipientIdAndStatus(reviewerId, veterinarianId,
+        if (!appointmentRepository.existsBySenderIdAndRecipientIdAndStatus(reviewerId, veterinarianId,
                 AppointmentStatus.COMPLETED))
             throw new AppException(ErrorCode.REVIEW_NOT_COMPLETED);
 
@@ -51,15 +50,13 @@ public class ReviewServiceImp implements ReviewService {
     }
 
     @Override
-    public Double getAverageStarForVet(Long veterinarianId)
-    {
+    public Double getAverageStarForVet(Long veterinarianId) {
         return reviewRepository.findAllByVeterinarianId(veterinarianId).stream().mapToInt(Review::getStars)
                 .average().orElse(0);
     }
 
     @Override
-    public ReviewDTO updateReview(long id, ReviewUpdatingRequest reviewUpdatingRequest)
-    {
+    public ReviewDTO updateReview(long id, ReviewUpdatingRequest reviewUpdatingRequest) {
         return reviewRepository.findById(id).map(review -> {
                     reviewMapper.updateReview(review, reviewUpdatingRequest);
                     return reviewMapper.toReviewDTO(reviewRepository.save(review));
@@ -68,21 +65,18 @@ public class ReviewServiceImp implements ReviewService {
     }
 
     @Override
-    public List<ReviewDTO> getReviewsByUserId(Long userId, int pageNumber, int pageSize)
-    {
+    public List<ReviewDTO> getReviewsByUserId(Long userId, int pageNumber, int pageSize) {
         return reviewRepository.findReviewsByUserId(userId, PageRequest.of(pageNumber, pageSize)).getContent().stream()
                 .map(reviewMapper::toReviewDTO).toList();
     }
 
     @Override
-    public void deleteReview(long id)
-    {
+    public void deleteReview(long id) {
         reviewRepository.deleteById(id);
     }
 
     @Override
-    public List<ReviewDTO> getAllReviewsOfUser(Long userId)
-    {
+    public List<ReviewDTO> getAllReviewsOfUser(Long userId) {
         return reviewRepository.findReviewsByUserId(userId, PageRequest.of(0, Integer.MAX_VALUE))
                 .getContent().stream()
                 .map(reviewMapper::toReviewDTO).toList();

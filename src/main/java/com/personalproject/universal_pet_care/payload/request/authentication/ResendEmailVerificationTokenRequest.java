@@ -1,4 +1,4 @@
-package com.personalproject.universal_pet_care.payload.request;
+package com.personalproject.universal_pet_care.payload.request.authentication;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ReviewUpdatingRequest {
-    int stars;
-    String feedback;
+public class ResendEmailVerificationTokenRequest {
+    String email;
 }

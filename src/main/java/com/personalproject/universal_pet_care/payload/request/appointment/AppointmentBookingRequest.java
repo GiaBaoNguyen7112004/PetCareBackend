@@ -1,6 +1,8 @@
-package com.personalproject.universal_pet_care.payload.request;
+package com.personalproject.universal_pet_care.payload.request.appointment;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.personalproject.universal_pet_care.payload.request.pet.PetRegistrationRequest;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -22,5 +24,6 @@ public class AppointmentBookingRequest {
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate appointmentDate;
 
+    @NotBlank(message = "MISSING_FIELD")
     List<PetRegistrationRequest> petRegistrationRequests;
 }

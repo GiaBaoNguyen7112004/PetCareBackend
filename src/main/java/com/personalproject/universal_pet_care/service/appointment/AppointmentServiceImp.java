@@ -13,8 +13,8 @@ import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
 import com.personalproject.universal_pet_care.mapper.AppointmentMapper;
 
-import com.personalproject.universal_pet_care.payload.request.AppointmentBookingRequest;
-import com.personalproject.universal_pet_care.payload.request.AppointmentUpdatingRequest;
+import com.personalproject.universal_pet_care.payload.request.appointment.AppointmentBookingRequest;
+import com.personalproject.universal_pet_care.payload.request.appointment.AppointmentUpdatingRequest;
 import com.personalproject.universal_pet_care.repository.AppointmentRepository;
 
 import com.personalproject.universal_pet_care.repository.user.UserRepository;

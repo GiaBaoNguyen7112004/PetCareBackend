@@ -2,8 +2,8 @@ package com.personalproject.universal_pet_care.mapper;
 
 import com.personalproject.universal_pet_care.dto.AppointmentDTO;
 import com.personalproject.universal_pet_care.entity.Appointment;
-import com.personalproject.universal_pet_care.payload.request.AppointmentBookingRequest;
-import com.personalproject.universal_pet_care.payload.request.AppointmentUpdatingRequest;
+import com.personalproject.universal_pet_care.payload.request.appointment.AppointmentBookingRequest;
+import com.personalproject.universal_pet_care.payload.request.appointment.AppointmentUpdatingRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

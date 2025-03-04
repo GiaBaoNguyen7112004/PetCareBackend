@@ -13,6 +13,4 @@ public interface VerificationTokenService {
     boolean isExpired(String token);
 
     String recreateNewVerificationToken(String oldToken);
-
-    void resendVerificationEmailToken(String email);
 }

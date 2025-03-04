@@ -2,7 +2,7 @@ package com.personalproject.universal_pet_care.factory;
 
 
 import com.personalproject.universal_pet_care.enums.UserType;
-import com.personalproject.universal_pet_care.payload.request.RegistrationRequest;
+import com.personalproject.universal_pet_care.payload.request.registration.AdminRegistrationRequest;
 import com.personalproject.universal_pet_care.entity.Admin;
 import com.personalproject.universal_pet_care.mapper.UserMapper;
 import com.personalproject.universal_pet_care.repository.user.AdminRepository;
@@ -20,7 +20,7 @@ public class AdminFactory {
     UserMapper userMapper;
     RoleService roleService;
 
-    public Admin createAdmin(RegistrationRequest registrationRequest) {
+    public Admin createAdmin(AdminRegistrationRequest registrationRequest) {
         Admin admin = new Admin();
         userMapper.toUser(admin, registrationRequest);
         admin.setRoles(roleService.getRolesForUser(UserType.ADMIN.toString()));

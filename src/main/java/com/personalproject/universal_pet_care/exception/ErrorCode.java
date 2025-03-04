@@ -37,7 +37,14 @@ public enum ErrorCode {
     MISSING_PASSWORD(1024, "Missing password", HttpStatus.BAD_REQUEST),
     INCORRECT_OLD_PASSWORD(1026, "Incorrect old password", HttpStatus.BAD_REQUEST),
     INVALID_KEY_OF_VALIDATION(1027, "Invalid key of validation", HttpStatus.INTERNAL_SERVER_ERROR),
-    MISSING_FIELD(1028, "Missing field", HttpStatus.BAD_REQUEST),
+    MISSING_FIELD(1028, "This field is required", HttpStatus.BAD_REQUEST),
+    INVALID_PASSWORD_LENGTH(1029, "Password must be at least {min} characters " +
+            "and not exceed {max} characters", HttpStatus.BAD_REQUEST),
+    INVALID_DOB(1030, "Your age must greater than {min}", HttpStatus.BAD_REQUEST),
+    INVALID_PASSWORD_CONTENT(1031, "Password only contain {regexp}", HttpStatus.BAD_REQUEST),
+    INVALID_EMAIL(1032, "Invalid email", HttpStatus.BAD_REQUEST),
+    INVALID_USER_TYPE(1033, "Invalid user type", HttpStatus.BAD_REQUEST),
+    INVALID_REGISTRATION_FORMAT(1034, "Invalid registration format", HttpStatus.BAD_REQUEST),
     ;
 
     int code;

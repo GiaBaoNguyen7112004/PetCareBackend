@@ -1,7 +1,6 @@
-package com.personalproject.universal_pet_care.payload.request;
+package com.personalproject.universal_pet_care.payload.request.review;
 
 import jakarta.validation.constraints.NotBlank;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,9 +9,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ChangePasswordRequest {
+public class ReviewSubmissionRequest {
+    String feedback;
     @NotBlank(message = "MISSING_FIELD")
-    String oldPassword;
-    @NotBlank(message = "MISSING_FIELD")
-    String newPassword;
+    int stars;
 }

@@ -1,13 +1,14 @@
 package com.personalproject.universal_pet_care.service.review;
 
 import com.personalproject.universal_pet_care.dto.ReviewDTO;
-import com.personalproject.universal_pet_care.payload.request.ReviewSubmissionRequest;
-import com.personalproject.universal_pet_care.payload.request.ReviewUpdatingRequest;
+import com.personalproject.universal_pet_care.payload.request.review.ReviewSubmissionRequest;
+import com.personalproject.universal_pet_care.payload.request.review.ReviewUpdatingRequest;
 
 import java.util.List;
 
 public interface ReviewService {
     ReviewDTO submitReview(ReviewSubmissionRequest reviewSubmissionRequest, long reviewerId, long veterinarianId);
+
     Double getAverageStarForVet(Long veterinarianId);
 
     ReviewDTO updateReview(long id, ReviewUpdatingRequest reviewUpdatingRequest);

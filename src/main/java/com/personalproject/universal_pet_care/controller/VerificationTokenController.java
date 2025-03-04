@@ -20,7 +20,7 @@ public class VerificationTokenController {
     VerificationTokenService verificationTokenService;
 
     @PostMapping(UrlMapping.VALIDATE_TOKEN)
-    public ResponseEntity<ApiResponse> validateToken(@RequestBody String token) {
+    public ResponseEntity<ApiResponse> validateToken(@RequestParam String token) {
         verificationTokenService.validateToken(token);
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.VALID_TOKEN)
@@ -29,7 +29,7 @@ public class VerificationTokenController {
     }
 
     @PostMapping(UrlMapping.CHECK_TOKEN_EXPIRATION)
-    public ResponseEntity<ApiResponse> checkTokenExpiration(@RequestBody String token) {
+    public ResponseEntity<ApiResponse> checkTokenExpiration(@RequestParam String token) {
         ApiResponse apiResponse = ApiResponse.builder()
                 .message(FeedbackMessage.VALID_TOKEN)
                 .data(verificationTokenService.isExpired(token))
@@ -45,15 +45,4 @@ public class VerificationTokenController {
                 .build();
         return ResponseEntity.ok().body(apiResponse);
     }
-
-    @PostMapping(UrlMapping.RESEND_EMAIL_VERIFICATION_TOKEN)
-    public ResponseEntity<ApiResponse> resendEmailVerificationToken(@RequestBody String email) {
-        verificationTokenService.resendVerificationEmailToken(email);
-        ApiResponse apiResponse = ApiResponse.builder()
-                .message(FeedbackMessage.RESEND_EMAIL_VERIFICATION_TOKEN_SUCCESS)
-                .build();
-        return ResponseEntity.ok().body(apiResponse);
-    }
-
-
 }

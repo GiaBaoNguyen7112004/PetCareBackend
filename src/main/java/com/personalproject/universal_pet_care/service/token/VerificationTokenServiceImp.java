@@ -3,7 +3,6 @@ package com.personalproject.universal_pet_care.service.token;
 import com.personalproject.universal_pet_care.entity.User;
 import com.personalproject.universal_pet_care.entity.VerificationToken;
 
-import com.personalproject.universal_pet_care.event.UserRegistrationEvent;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
 
@@ -14,7 +13,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import org.springframework.context.ApplicationEventPublisher;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,7 +26,6 @@ import java.util.UUID;
 public class VerificationTokenServiceImp implements VerificationTokenService {
     VerificationTokenRepository verificationTokenRepository;
     UserRepository userRepository;
-    ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public void validateToken(String token) {
@@ -72,11 +70,5 @@ public class VerificationTokenServiceImp implements VerificationTokenService {
                     return verificationTokenRepository.save(verificationToken).getToken();
                 }
         ).orElseThrow(() -> new AppException(ErrorCode.INVALID_VERIFICATION_TOKEN));
-    }
-
-    @Override
-    public void resendVerificationEmailToken(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
-        applicationEventPublisher.publishEvent(new UserRegistrationEvent(user));
     }
 }

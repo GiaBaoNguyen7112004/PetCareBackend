@@ -1,12 +1,13 @@
 package com.personalproject.universal_pet_care.controller;
 
 
-import com.personalproject.universal_pet_care.payload.request.AppointmentBookingRequest;
-import com.personalproject.universal_pet_care.payload.request.AppointmentUpdatingRequest;
+import com.personalproject.universal_pet_care.payload.request.appointment.AppointmentBookingRequest;
+import com.personalproject.universal_pet_care.payload.request.appointment.AppointmentUpdatingRequest;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
 import com.personalproject.universal_pet_care.service.appointment.AppointmentService;
 import com.personalproject.universal_pet_care.utils.FeedbackMessage;
 import com.personalproject.universal_pet_care.utils.UrlMapping;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,7 +26,7 @@ public class AppointmentController {
     AppointmentService appointmentService;
 
     @PostMapping(UrlMapping.BOOK_APPOINTMENT)
-    public ResponseEntity<ApiResponse> bookAppointment(@RequestBody AppointmentBookingRequest appointmentBookingRequest,
+    public ResponseEntity<ApiResponse> bookAppointment(@RequestBody @Valid AppointmentBookingRequest appointmentBookingRequest,
                                                        @RequestParam long senderId, @RequestParam long recipientId) {
         ApiResponse apiResponse = ApiResponse.builder()
                 .data(appointmentService.bookAppointment(appointmentBookingRequest, senderId, recipientId))
@@ -45,7 +46,7 @@ public class AppointmentController {
 
     @PutMapping(UrlMapping.UPDATE_APPOINTMENT)
     public ResponseEntity<ApiResponse> updateAppointment(@PathVariable long id,
-                                                         @RequestBody AppointmentUpdatingRequest appointmentUpdatingRequest) {
+                                                         @RequestBody @Valid AppointmentUpdatingRequest appointmentUpdatingRequest) {
         ApiResponse apiResponse = ApiResponse.builder()
                 .data(appointmentService.updateAppointment(id, appointmentUpdatingRequest))
                 .message(FeedbackMessage.UPDATE_SUCCESS)

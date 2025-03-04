@@ -1,8 +1,6 @@
-package com.personalproject.universal_pet_care.payload.request;
-
+package com.personalproject.universal_pet_care.payload.request.authentication;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,11 +9,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationRequest {
-    @NotEmpty
-    @Email
+public class PasswordResetEmailRequest {
+    @Email(message = "INVALID_EMAIL")
     String email;
-
-    @NotEmpty
-    String password;
 }

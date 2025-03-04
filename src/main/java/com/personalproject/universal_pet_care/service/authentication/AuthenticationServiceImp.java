@@ -3,11 +3,12 @@ package com.personalproject.universal_pet_care.service.authentication;
 import com.personalproject.universal_pet_care.dto.AuthenticationDTO;
 import com.personalproject.universal_pet_care.entity.User;
 import com.personalproject.universal_pet_care.event.PasswordResetEvent;
+import com.personalproject.universal_pet_care.event.UserRegistrationEvent;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
-import com.personalproject.universal_pet_care.payload.request.AuthenticationRequest;
+import com.personalproject.universal_pet_care.payload.request.authentication.AuthenticationRequest;
 
-import com.personalproject.universal_pet_care.payload.request.ChangePasswordRequest;
+import com.personalproject.universal_pet_care.payload.request.authentication.ChangePasswordRequest;
 import com.personalproject.universal_pet_care.repository.user.UserRepository;
 import com.personalproject.universal_pet_care.security.jwt.JwtUtils;
 import com.personalproject.universal_pet_care.security.user.AppUserDetails;
@@ -69,5 +70,11 @@ public class AuthenticationServiceImp implements AuthenticationService {
             user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
             userRepository.save(user);
         } else throw new AppException(ErrorCode.INCORRECT_OLD_PASSWORD);
+    }
+
+    @Override
+    public void resendVerificationEmailToken(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_FOUND));
+        applicationEventPublisher.publishEvent(new UserRegistrationEvent(user));
     }
 }

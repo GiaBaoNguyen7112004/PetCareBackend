@@ -1,4 +1,4 @@
-package com.personalproject.universal_pet_care.payload.request;
+package com.personalproject.universal_pet_care.payload.request.appointment;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;

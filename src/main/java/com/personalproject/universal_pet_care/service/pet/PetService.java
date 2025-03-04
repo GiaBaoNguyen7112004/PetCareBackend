@@ -4,8 +4,8 @@ package com.personalproject.universal_pet_care.service.pet;
 import com.personalproject.universal_pet_care.dto.PetDTO;
 import com.personalproject.universal_pet_care.entity.Appointment;
 import com.personalproject.universal_pet_care.entity.Pet;
-import com.personalproject.universal_pet_care.payload.request.AppointmentBookingRequest;
-import com.personalproject.universal_pet_care.payload.request.PetUpdatingRequest;
+import com.personalproject.universal_pet_care.payload.request.appointment.AppointmentBookingRequest;
+import com.personalproject.universal_pet_care.payload.request.pet.PetUpdatingRequest;
 
 import java.util.List;
 

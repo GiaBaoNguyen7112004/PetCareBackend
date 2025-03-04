@@ -5,8 +5,8 @@ import com.personalproject.universal_pet_care.entity.VerificationToken;
 import com.personalproject.universal_pet_care.event.PasswordResetEvent;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
-import com.personalproject.universal_pet_care.payload.request.PasswordResetConfirmRequest;
-import com.personalproject.universal_pet_care.payload.request.PasswordResetEmailRequest;
+import com.personalproject.universal_pet_care.payload.request.authentication.PasswordResetConfirmRequest;
+import com.personalproject.universal_pet_care.payload.request.authentication.PasswordResetEmailRequest;
 
 import com.personalproject.universal_pet_care.repository.VerificationTokenRepository;
 import com.personalproject.universal_pet_care.repository.user.UserRepository;

@@ -3,7 +3,7 @@ package com.personalproject.universal_pet_care.mapper;
 import com.personalproject.universal_pet_care.dto.ReviewDTO;
 import com.personalproject.universal_pet_care.entity.Review;
 
-import com.personalproject.universal_pet_care.payload.request.ReviewUpdatingRequest;
+import com.personalproject.universal_pet_care.payload.request.review.ReviewUpdatingRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -12,5 +12,6 @@ import org.mapstruct.MappingTarget;
 public interface ReviewMapper {
     @Mapping(target = "reviewer", source = "reviewer")
     ReviewDTO toReviewDTO(Review review);
+
     void updateReview(@MappingTarget Review review, ReviewUpdatingRequest reviewUpdatingRequest);
 }
