@@ -1,6 +1,7 @@
 package com.personalproject.universal_pet_care.service.authentication;
 
 import com.personalproject.universal_pet_care.dto.AuthenticationDTO;
+import com.personalproject.universal_pet_care.dto.IntrospectDTO;
 import com.personalproject.universal_pet_care.entity.User;
 import com.personalproject.universal_pet_care.event.PasswordResetEvent;
 import com.personalproject.universal_pet_care.event.UserRegistrationEvent;
@@ -9,6 +10,7 @@ import com.personalproject.universal_pet_care.exception.ErrorCode;
 import com.personalproject.universal_pet_care.payload.request.authentication.AuthenticationRequest;
 
 import com.personalproject.universal_pet_care.payload.request.authentication.ChangePasswordRequest;
+import com.personalproject.universal_pet_care.payload.request.authentication.IntrospectRequest;
 import com.personalproject.universal_pet_care.repository.user.UserRepository;
 import com.personalproject.universal_pet_care.security.jwt.JwtUtils;
 import com.personalproject.universal_pet_care.security.user.AppUserDetails;
@@ -37,6 +39,13 @@ public class AuthenticationServiceImp implements AuthenticationService {
     UserRepository userRepository;
     ApplicationEventPublisher applicationEventPublisher;
     PasswordEncoder passwordEncoder;
+
+    @Override
+    public IntrospectDTO introspect(IntrospectRequest introspectRequest) {
+        return IntrospectDTO.builder()
+                .isValid(jwtUtils.verifyToken(introspectRequest.getToken()))
+                .build();
+    }
 
     @Override
     public AuthenticationDTO authenticate(AuthenticationRequest authenticationRequest) {

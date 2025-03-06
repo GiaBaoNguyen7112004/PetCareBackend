@@ -97,4 +97,14 @@ public class AuthenticationController {
                 .build();
         return ResponseEntity.ok().body(apiResponse);
     }
+
+    @PostMapping(UrlMapping.INTROSPECT)
+    public ResponseEntity<ApiResponse>
+    introspect(@RequestBody IntrospectRequest introspectRequest) {
+        ApiResponse apiResponse = ApiResponse.builder()
+                .data(authenticationService.introspect(introspectRequest))
+                .message(FeedbackMessage.VALID_TOKEN)
+                .build();
+        return ResponseEntity.ok().body(apiResponse);
+    }
 }

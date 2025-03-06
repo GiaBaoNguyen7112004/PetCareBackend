@@ -60,6 +60,7 @@ public class UrlMapping {
     public static final String RESET_PASSWORD = "/reset-password";
     public static final String RESEND_PASSWORD_RESET_TOKEN = "/resend-password-reset-token";
     public static final String CHANGE_PASSWORD = "/change-password";
+    public static final String INTROSPECT = "/introspect";
 
     //    Verification Token
     public static final String TOKEN_VERIFICATION = API + "/verification";

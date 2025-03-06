@@ -45,7 +45,7 @@ public class JwtUtils {
         return Keys.hmacShaKeyFor(Base64.getDecoder().decode(secretKey));
     }
 
-    //    Dung parserBuilder() de tao ra 1 doi tuong JwtParser dung de phan tich va giai ma token
+    //    Dung parserBuilder()...build() de tao ra 1 doi tuong JwtParser dung de phan tich va giai ma token
     public String getUsernameFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(getKey())
                 .build().parseClaimsJws(token).getBody().getSubject();
