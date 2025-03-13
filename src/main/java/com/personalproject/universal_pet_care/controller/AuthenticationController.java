@@ -69,16 +69,6 @@ public class AuthenticationController {
         return ResponseEntity.ok().body(apiResponse);
     }
 
-    @PostMapping(UrlMapping.RESEND_PASSWORD_RESET_TOKEN)
-    public ResponseEntity<ApiResponse> resendPasswordResetToken(@RequestBody @Valid
-                                                                PasswordResetEmailRequest passwordResetEmailRequest) {
-        authenticationService.resendPasswordResetToken(passwordResetEmailRequest.getEmail());
-        ApiResponse apiResponse = ApiResponse.builder()
-                .message(FeedbackMessage.RESEND_PASSWORD_RESET_TOKEN_SUCCESS)
-                .build();
-        return ResponseEntity.ok().body(apiResponse);
-    }
-
     @PutMapping(UrlMapping.CHANGE_PASSWORD)
     public ResponseEntity<ApiResponse> changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest) {
         authenticationService.changePassword(changePasswordRequest);

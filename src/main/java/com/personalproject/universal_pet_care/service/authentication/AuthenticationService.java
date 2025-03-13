@@ -11,8 +11,6 @@ public interface AuthenticationService {
 
     AuthenticationDTO authenticate(AuthenticationRequest authenticationRequest);
 
-    void resendPasswordResetToken(String email);
-
     void changePassword(ChangePasswordRequest changePasswordRequest);
 
     void resendVerificationEmailToken(String email);

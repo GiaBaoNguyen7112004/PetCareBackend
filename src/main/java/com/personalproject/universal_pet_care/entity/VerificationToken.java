@@ -1,6 +1,6 @@
 package com.personalproject.universal_pet_care.entity;
 
-import com.personalproject.universal_pet_care.utils.SystemUtils;
+import com.personalproject.universal_pet_care.utils.VerificationTokenUtils;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -25,6 +25,6 @@ public class VerificationToken {
     public VerificationToken(User user, String token) {
         this.user = user;
         this.token = token;
-        this.expiryTime = SystemUtils.getExpirationTime();
+        this.expiryTime = VerificationTokenUtils.getExpirationTime();
     }
 }

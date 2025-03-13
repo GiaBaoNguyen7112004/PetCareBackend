@@ -1,7 +1,5 @@
 package com.personalproject.universal_pet_care.controller;
 
-
-import com.personalproject.universal_pet_care.payload.request.registration.PatientRegistrationRequest;
 import com.personalproject.universal_pet_care.payload.request.registration.RegistrationRequest;
 import com.personalproject.universal_pet_care.payload.request.user.UserUpdatingRequest;
 import com.personalproject.universal_pet_care.payload.response.ApiResponse;
@@ -28,9 +26,6 @@ public class UserController {
 
     @PostMapping(UrlMapping.REGISTER_USER)
     public ResponseEntity<ApiResponse> register(@RequestBody @Valid RegistrationRequest registrationRequest) {
-        if (registrationRequest instanceof PatientRegistrationRequest) {
-            log.info("kIEM TRA KIEU CUA REGISTRATION REQUEST TRONG REGISTER o usercontroller");
-        }
         ApiResponse apiResponse = ApiResponse.builder()
                 .data(userService.register(registrationRequest))
                 .message(FeedbackMessage.CREATE_SUCCESS)

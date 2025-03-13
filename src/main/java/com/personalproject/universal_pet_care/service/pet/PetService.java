@@ -4,19 +4,51 @@ package com.personalproject.universal_pet_care.service.pet;
 import com.personalproject.universal_pet_care.dto.PetDTO;
 import com.personalproject.universal_pet_care.entity.Appointment;
 import com.personalproject.universal_pet_care.entity.Pet;
+import com.personalproject.universal_pet_care.exception.AppException;
+import com.personalproject.universal_pet_care.exception.ErrorCode;
+import com.personalproject.universal_pet_care.mapper.PetMapper;
 import com.personalproject.universal_pet_care.payload.request.appointment.AppointmentBookingRequest;
 import com.personalproject.universal_pet_care.payload.request.pet.PetUpdatingRequest;
+import com.personalproject.universal_pet_care.repository.PetRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface PetService {
-    List<Pet> savePetForAppointment(Appointment appointment, AppointmentBookingRequest appointmentBookingRequest);
+@Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
+public class PetService {
+    PetRepository petRepository;
+    PetMapper petMapper;
 
-    PetDTO updatePet(long id, PetUpdatingRequest petUpdatingRequest);
+    public List<Pet> savePetForAppointment(Appointment appointment,
+                                           AppointmentBookingRequest appointmentBookingRequest) {
+        List<Pet> pets = appointmentBookingRequest.getPetRegistrationRequests().stream().map(petMapper::toPet)
+                .toList();
+        pets.forEach(pet -> pet.setAppointment(appointment));
+        return petRepository.saveAll(pets);
+    }
 
-    PetDTO getPetById(long id);
+    public PetDTO updatePet(long id, PetUpdatingRequest petUpdatingRequest) {
+        Pet pet = petRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND));
+        petMapper.updatePet(pet, petUpdatingRequest);
 
-    void deletePet(long id);
+        return petMapper.toPetDTO(petRepository.save(pet));
+    }
 
-    List<PetDTO> getAllPets();
+    public PetDTO getPetById(long id) {
+        return petMapper.toPetDTO(petRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND)));
+    }
+
+    public void deletePet(long id) {
+        petRepository.deleteById(id);
+    }
+
+    public List<PetDTO> getAllPets() {
+        return petRepository.findAll().stream().map(petMapper::toPetDTO).toList();
+    }
 }

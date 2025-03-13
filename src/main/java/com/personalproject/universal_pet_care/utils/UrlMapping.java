@@ -52,7 +52,7 @@ public class UrlMapping {
     public static final String GET_AVERAGE_STARS_FOR_VET = "/vet/avg-star/{veterinarianId}";
     public static final String GET_REVIEWS_BY_ID = "/user/{id}";
 
-    //    Authentication
+    //    Authentication API
     public static final String AUTHENTICATION = API + "/authentication";
     public static final String LOGIN = "/log-in";
     public static final String VERIFY_EMAIL = "/verify-email";
@@ -62,12 +62,18 @@ public class UrlMapping {
     public static final String CHANGE_PASSWORD = "/change-password";
     public static final String INTROSPECT = "/introspect";
 
-    //    Verification Token
+    //    Verification Token API
     public static final String TOKEN_VERIFICATION = API + "/verification";
     public static final String VALIDATE_TOKEN = "/validate-token";
     public static final String DELETE_TOKEN = "/token/{tokenId}";
     public static final String CHECK_TOKEN_EXPIRATION = "/check-token-expiration";
     public static final String RESEND_EMAIL_VERIFICATION_TOKEN = "/resend-email-verification-token";
+
+    //    Cache API
+    public static final String CACHE = API + "/cache";
+    public static final String CLEAR_CACHE = "/clear-cache";
+    public static final String GET_TIME_TO_LIVE = "/time-to-live/{key}";
+
 
     //    constructor
     private UrlMapping() {

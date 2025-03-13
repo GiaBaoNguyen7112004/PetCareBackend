@@ -1,31 +1,145 @@
 package com.personalproject.universal_pet_care.service.appointment;
 
 import com.personalproject.universal_pet_care.dto.AppointmentDTO;
+import com.personalproject.universal_pet_care.entity.Appointment;
+import com.personalproject.universal_pet_care.entity.User;
+import com.personalproject.universal_pet_care.enums.AppointmentStatus;
+import com.personalproject.universal_pet_care.event.AppointmentApprovedEvent;
+import com.personalproject.universal_pet_care.event.AppointmentBookedEvent;
+import com.personalproject.universal_pet_care.event.AppointmentCompletedEvent;
+import com.personalproject.universal_pet_care.event.AppointmentDeclinedEvent;
+import com.personalproject.universal_pet_care.exception.AppException;
+import com.personalproject.universal_pet_care.exception.ErrorCode;
+import com.personalproject.universal_pet_care.mapper.AppointmentMapper;
 import com.personalproject.universal_pet_care.payload.request.appointment.AppointmentBookingRequest;
 import com.personalproject.universal_pet_care.payload.request.appointment.AppointmentUpdatingRequest;
+import com.personalproject.universal_pet_care.repository.AppointmentRepository;
+import com.personalproject.universal_pet_care.repository.user.UserRepository;
+import com.personalproject.universal_pet_care.scheduler.AppointmentStatusUpdater;
+import com.personalproject.universal_pet_care.service.cache.CacheService;
+import com.personalproject.universal_pet_care.service.pet.PetService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-public interface AppointmentService {
-    AppointmentDTO bookAppointment(AppointmentBookingRequest appointmentBookingRequest, long senderId, long recipientId);
+@Service
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
+public class AppointmentService {
+    AppointmentMapper appointmentMapper;
+    UserRepository userRepository;
+    AppointmentRepository appointmentRepository;
+    PetService petService;
+    ApplicationEventPublisher applicationEventPublisher;
+    AppointmentStatusUpdater appointmentStatusUpdater;
+    CacheService cacheService;
 
-    List<AppointmentDTO> getAllAppointments();
+    @Transactional
+    public AppointmentDTO bookAppointment(AppointmentBookingRequest appointmentBookingRequest, long senderId, long recipientId) {
+        if (LocalDateTime.of(appointmentBookingRequest.getAppointmentDate(),
+                appointmentBookingRequest.getAppointmentTime()).isBefore(LocalDateTime.now()))
+            throw new AppException(ErrorCode.INVALID_TIME);
 
-    AppointmentDTO updateAppointment(long id, AppointmentUpdatingRequest appointmentUpdatingRequest);
+        Appointment appointment = appointmentMapper.toAppointment(appointmentBookingRequest);
+        appointment.addSender(getUserById(senderId));
+        appointment.addRecipient(getUserById(recipientId));
+        appointment.setAppointmentNo();
+        appointment.setStatus(AppointmentStatus.WAITING_FOR_APPROVAL);
+        appointment.setPets(petService.savePetForAppointment(appointment, appointmentBookingRequest));
 
-    void deleteAppointment(long id);
+        applicationEventPublisher.publishEvent(new AppointmentBookedEvent(appointment));
+        return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
+    }
 
-    AppointmentDTO getAppointmentById(long id);
+    public List<AppointmentDTO> getAllAppointments() {
+        return appointmentRepository.findAll().stream()
+                .map(appointmentMapper::toAppointmentDTO).toList();
+    }
 
-    AppointmentDTO getAppointmentByNo(String no);
+    public AppointmentDTO updateAppointment(long id, AppointmentUpdatingRequest appointmentUpdatingRequest) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
 
-    List<AppointmentDTO> getAppointmentByUserId(Long id);
+        if (!appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+            throw new AppException(ErrorCode.APPOINTMENT_UPDATE_FAILED);
 
-    AppointmentDTO cancelAppointment(Long id);
+        appointmentMapper.updateAppointment(appointment, appointmentUpdatingRequest);
+        appointmentStatusUpdater.scheduleStatusUpdate(appointment.getId());
 
-    AppointmentDTO approveAppointment(Long id);
+        return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
+    }
 
-    AppointmentDTO declineAppointment(Long id);
+    public void deleteAppointment(long id) {
+        appointmentStatusUpdater.cancelScheduledTasks(id);
+        appointmentRepository.deleteById(id);
+    }
 
-    AppointmentDTO confirmCompleteAppointment(Long id);
+    public AppointmentDTO getAppointmentById(long id) {
+        return appointmentMapper.toAppointmentDTO(appointmentRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND)));
+    }
+
+    public AppointmentDTO getAppointmentByNo(String no) {
+        return appointmentMapper.toAppointmentDTO(appointmentRepository.findByAppointmentNo(no)
+                .orElseThrow(() -> new AppException(ErrorCode.NO_DATA_FOUND)));
+    }
+
+    public List<AppointmentDTO> getAppointmentByUserId(Long id) {
+        return appointmentRepository.findByUserId(id).stream().map(appointmentMapper::toAppointmentDTO).toList();
+    }
+
+    public AppointmentDTO cancelAppointment(Long id) {
+        return appointmentRepository.findById(id).filter(
+                        appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+                .map(appointment -> {
+                    appointment.setStatus(AppointmentStatus.CANCELLED);
+                    return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
+                })
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
+    }
+
+    public AppointmentDTO approveAppointment(Long id) {
+        return appointmentRepository.findById(id).filter(
+                        appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+                .map(appointment -> {
+                    appointment.setStatus(AppointmentStatus.APPROVED);
+                    appointmentStatusUpdater.scheduleStatusUpdate(appointment.getId());
+                    applicationEventPublisher.publishEvent(new AppointmentApprovedEvent(appointment));
+                    return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
+                })
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
+    }
+
+    public AppointmentDTO declineAppointment(Long id) {
+        return appointmentRepository.findById(id).filter(
+                        appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+                .map(appointment -> {
+                    appointment.setStatus(AppointmentStatus.NOT_APPROVED);
+                    applicationEventPublisher.publishEvent(new AppointmentDeclinedEvent(appointment));
+                    return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
+                })
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
+    }
+
+    public AppointmentDTO confirmCompleteAppointment(Long id) {
+        return appointmentRepository.findById(id).filter(
+                        appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+                .map(appointment -> {
+                    appointment.setStatus(AppointmentStatus.COMPLETED);
+                    applicationEventPublisher.publishEvent(new AppointmentCompletedEvent(appointment));
+                    return appointmentMapper.toAppointmentDTO(appointmentRepository.save(appointment));
+                })
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
+    }
+
+    private User getUserById(long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+    }
 }

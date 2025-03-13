@@ -3,10 +3,10 @@ package com.personalproject.universal_pet_care.service.authentication;
 import com.personalproject.universal_pet_care.dto.AuthenticationDTO;
 import com.personalproject.universal_pet_care.dto.IntrospectDTO;
 import com.personalproject.universal_pet_care.entity.User;
-import com.personalproject.universal_pet_care.event.PasswordResetEvent;
 import com.personalproject.universal_pet_care.event.UserRegistrationEvent;
 import com.personalproject.universal_pet_care.exception.AppException;
 import com.personalproject.universal_pet_care.exception.ErrorCode;
+import com.personalproject.universal_pet_care.mapper.UserMapper;
 import com.personalproject.universal_pet_care.payload.request.authentication.AuthenticationRequest;
 
 import com.personalproject.universal_pet_care.payload.request.authentication.ChangePasswordRequest;
@@ -15,6 +15,8 @@ import com.personalproject.universal_pet_care.repository.user.UserRepository;
 import com.personalproject.universal_pet_care.security.jwt.JwtUtils;
 import com.personalproject.universal_pet_care.security.user.AppUserDetails;
 
+
+import com.personalproject.universal_pet_care.service.jwt.RefreshTokenService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -37,8 +39,10 @@ public class AuthenticationServiceImp implements AuthenticationService {
     JwtUtils jwtUtils;
     AuthenticationManager authenticationManager;
     UserRepository userRepository;
+    UserMapper userMapper;
     ApplicationEventPublisher applicationEventPublisher;
     PasswordEncoder passwordEncoder;
+    RefreshTokenService refreshTokenService;
 
     @Override
     public IntrospectDTO introspect(IntrospectRequest introspectRequest) {
@@ -55,17 +59,16 @@ public class AuthenticationServiceImp implements AuthenticationService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         AppUserDetails appUserDetails = (AppUserDetails) authentication.getPrincipal();
+        User user = appUserDetails.getUser();
+
+        String refreshToken = jwtUtils.generateToken(authentication, true);
+        refreshTokenService.saveRefreshTokenForUser(refreshToken, user.getId());
 
         return AuthenticationDTO.builder()
-                .id(appUserDetails.getUser().getId())
-                .token(jwtUtils.generateToken(authentication))
+                .userDTO(userMapper.toUserDTO(user))
+                .accessToken(jwtUtils.generateToken(authentication, false))
+                .refreshToken(refreshToken)
                 .build();
-    }
-
-    @Override
-    public void resendPasswordResetToken(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        applicationEventPublisher.publishEvent(new PasswordResetEvent(user));
     }
 
     @Override

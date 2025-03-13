@@ -5,10 +5,10 @@ import com.personalproject.universal_pet_care.exception.ErrorCode;
 
 import java.time.LocalDateTime;
 
-public class SystemUtils {
+public class VerificationTokenUtils {
     private static final long EXPIRATION_TIME = 2;
 
-    private SystemUtils() {
+    private VerificationTokenUtils() {
         throw new AppException(ErrorCode.INITIATE_UTILITIES);
     }
 

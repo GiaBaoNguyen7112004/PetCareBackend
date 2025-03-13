@@ -19,7 +19,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EmailListenerService {
+public class EmailListener {
     final EmailService emailService;
     final VerificationTokenService verificationTokenService;
 

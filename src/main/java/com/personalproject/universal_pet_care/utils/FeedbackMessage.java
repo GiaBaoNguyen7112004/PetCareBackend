@@ -30,6 +30,10 @@ public class FeedbackMessage {
     //    Verification
     public static final String RESEND_EMAIL_VERIFICATION_TOKEN_SUCCESS = "Resend email verification token successfully";
 
+    //    Cache
+    public static final String CLEAR_CACHE_SUCCESS = "Clear cache successfully";
+    public static final String GET_TIME_TO_LIVE_SUCCESS = "Get time to live successfully";
+
     private FeedbackMessage() {
         throw new AppException(ErrorCode.INITIATE_UTILITIES);
     }
